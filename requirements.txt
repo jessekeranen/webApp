@@ -35,7 +35,6 @@ lxml==4.9.1
 MarkupSafe==2.1.1
 matplotlib==3.6.2
 mkl==2022.2.1
-mkl-service==2.4.0
 mpmath==1.2.1
 multitasking==0.0.11
 munkres==1.1.4
