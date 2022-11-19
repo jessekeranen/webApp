@@ -18,8 +18,7 @@ def calculate():
     interval = str(request.form["interval"])
     final = "You chose: " + name + start + end + interval
     flash(final)
-    df = logic.getData(name, interval)
+    df, labels, values = logic.getData(name, interval)
 
-    png = logic.plotImage(df)
+    return render_template("index.html", tables=[df.tail(10).to_html(classes='data')], titles=df.columns.values, labels=labels, values=values)
 
-    return render_template("index.html", tables=[df.to_html(classes='data')], titles=df.columns.values, image=png)

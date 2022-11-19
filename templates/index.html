@@ -1,38 +1,68 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script> src = "https://cdn.jsdelivr.net/npm/chart.js"</script>
+</head>
 <body>
-
 <h1>My First Heading</h1>
+<div class="whole">
+    <div class="left">
+        <form action="/echo" method="post">
+            <label for="name">Company Ticker:</label>
+            <input type="text" id="name" name="name"><br><br>
+            <label for="start">Start Date:</label>
+            <input type="datetime-local" id="start" name="start"><br>
+            <label for="end">End Date:</label>
+            <input type="datetime-local" id="end" name="end"><br><br>
 
-<form action="/echo" method="post">
-    <label for="name">Company Ticker:</label>
-    <input type="text" id="name" name="name"><br><br>
-    <label for="start">Start Date:</label>
-    <input type="datetime-local" id="start" name="start">
-    <label for="end">End Date:</label>
-    <input type="datetime-local" id="end" name="end"><br><br>
+            <label for="interval">Interval:</label>
+            <select name="interval" id="interval">
+                <option value="1mo">Month</option>
+                <option value="1wk">Week</option>
+                <option value="1d">Day</option>
+                <option value="1h">Hour</option>
+            </select><br><br>
 
-    <label for="interval">Interval:</label>
-    <select name="interval" id="interval">
-        <option value="1mo">Month</option>
-        <option value="1wk">Week</option>
-        <option value="1d">Day</option>
-        <option value="1h">Hour</option>
-    </select><br><br>
+            <input type="submit" value="Submit"><br><br>
 
-    {% for message in get_flashed_messages() %}
-        <p>{{ message }}</p>
-    {% endfor %}
+            {% for message in get_flashed_messages() %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </form>
+    <div>
 
-    <img src="{{ image }}"/><br><br>
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
 
-    <input type="submit" value="Submit"><br><br>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    {% for table in tables %}
-        {{ titles[loop.index] }}
-        {{ table|safe }}
-    {% endfor %}
-</form>
+                <script>
+                    const ctx = document.getElementById('myChart').getContext("2d");
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: {{ labels | safe }},
+                            datasets: [{
+                                label: 'Price',
+                                data: {{ values | safe}},
+                                borderWidth: 1
+                            }]
+                        },
+                    });
+                </script>
+            </div>
+    </div>
+    <div class="right">
+        {% for table in tables %}
+            {{ titles[loop.index] }}
+            {{ table|safe }}
+        {% endfor %}
+    </div>
+</div>
 
 </body>
 </html>
