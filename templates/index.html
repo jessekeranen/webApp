@@ -10,8 +10,16 @@
 <div class="whole">
     <div class="left">
         <form action="/echo" method="post">
-            <label for="name">Company Ticker:</label>
-            <input type="text" id="name" name="name"><br><br>
+            <label for="name1">Company Ticker:</label>
+            <input type="text" id="name1" name="name1"><br>
+            <label for="name2">Company Ticker:</label>
+            <input type="text" id="name2" name="name2"><br>
+            <label for="name3">Company Ticker:</label>
+            <input type="text" id="name3" name="name3"><br>
+            <label for="name4">Company Ticker:</label>
+            <input type="text" id="name4" name="name4"><br>
+            <label for="name5">Company Ticker:</label>
+            <input type="text" id="name5" name="name5"><br><br>
             <label for="start">Start Date:</label>
             <input type="datetime-local" id="start" name="start"><br>
             <label for="end">End Date:</label>
@@ -31,30 +39,44 @@
                 <p>{{ message }}</p>
             {% endfor %}
         </form>
-    <div>
+        <div>
 
-                <div>
-                    <canvas id="myChart"></canvas>
-                </div>
-
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-                <script>
-                    const ctx = document.getElementById('myChart').getContext("2d");
-
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: {{ labels | safe }},
-                            datasets: [{
-                                label: 'Price',
-                                data: {{ values | safe}},
-                                borderWidth: 1
-                            }]
-                        },
-                    });
-                </script>
+            <div>
+                <canvas id="myChart"></canvas>
             </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                const ctx = document.getElementById('myChart').getContext("2d");
+
+                var lineChartData = {
+                        labels: {{ labels | safe }},
+                        datasets: []
+                    },
+                    array = {{ values | safe }};
+                    names = {{ names | safe }}
+
+                array.forEach(function (a, i) {
+                    lineChartData.datasets.push({
+                        label: names[i],
+                        fillColor: 'rgba(220,220,220,0.2)',
+                        strokeColor: 'rgba(220,220,220,1)',
+                        pointColor: 'rgba(220,220,220,1)',
+                        pointStrokeColor: '#fff',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke:
+                            'rgba(220,220,220,1)',
+                        data: a
+                    });
+                });
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: lineChartData
+                });
+            </script>
+        </div>
     </div>
     <div class="right">
         {% for table in tables %}
