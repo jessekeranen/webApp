@@ -42,31 +42,28 @@
         <div>
 
             <div>
-                <canvas id="myChart"></canvas>
+                <canvas id="firstChart"></canvas>
+            </div>
+            <div>
+                <canvas id="secondChart"></canvas>
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
             <script>
-                const ctx = document.getElementById('myChart').getContext("2d");
+                const ctx = document.getElementById('firstChart').getContext("2d");
 
                 var lineChartData = {
-                        labels: {{ labels | safe }},
-                        datasets: []
-                    },
-                    array = {{ values | safe }};
-                    names = {{ names | safe }}
+                    labels: {{ labels | safe }},
+                    datasets: []
+                };
+                array = {{ values | safe }};
+                names = {{ names | safe }};
 
                 array.forEach(function (a, i) {
                     lineChartData.datasets.push({
                         label: names[i],
-                        fillColor: 'rgba(220,220,220,0.2)',
-                        strokeColor: 'rgba(220,220,220,1)',
-                        pointColor: 'rgba(220,220,220,1)',
-                        pointStrokeColor: '#fff',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke:
-                            'rgba(220,220,220,1)',
+                        borderline: 1,
                         data: a
                     });
                 });
@@ -74,6 +71,20 @@
                 new Chart(ctx, {
                     type: 'line',
                     data: lineChartData
+                });
+
+                const ctx2 = document.getElementById('secondChart').getContext("2d");
+
+                new Chart(ctx2, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Volatility, Return',
+                            data: {{ rand | safe }},
+                            backgroundColor: {{ color | safe }},
+                            showLine: false,
+                        }]
+                    }
                 });
             </script>
         </div>
