@@ -1,25 +1,5 @@
-.whole {
-    display: flex;
-    flex-direction: row;
-}
-
-.left {
-  display: block;
-  float: left;
-  margin: 1em;
-}
-
-.right {
-    display: block;
-  float: right;
-  margin: 1em;
-}
-
-.image {
-    width: 100%;
-}
-
 table {
+    border: none;
   border-collapse: collapse;
     margin: 0px 0;
     font-size: 0.9em;
@@ -35,11 +15,14 @@ table thead tr {
 
 table th,
 table td {
-    padding: 0px 0px;
+    text-align: left;
+    border: none;
+    padding: 10px 10px;
     width: 5%;
 }
 
 table tbody tr {
+    border: none;
     border-bottom: 1px solid #dddddd;
 }
 

@@ -6,7 +6,7 @@
     <script> src = "https://cdn.jsdelivr.net/npm/chart.js"</script>
 </head>
 <body>
-<h1>My First Heading</h1>
+<h1>First Heading</h1>
 <div class="whole">
     <div class="left">
         <form action="/echo" method="post">
@@ -57,8 +57,8 @@
                     labels: {{ labels | safe }},
                     datasets: []
                 };
-                array = {{ values | safe }};
-                names = {{ names | safe }};
+                var array = {{ values | safe }};
+                var names = {{ names | safe }};
 
                 array.forEach(function (a, i) {
                     lineChartData.datasets.push({
@@ -70,20 +70,42 @@
 
                 new Chart(ctx, {
                     type: 'line',
-                    data: lineChartData
+                    data: lineChartData,
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Line chart of stock prices within portfolio'
+                            },
+                        },
+                    }
                 });
 
                 const ctx2 = document.getElementById('secondChart').getContext("2d");
 
                 new Chart(ctx2, {
-                    type: 'scatter',
                     data: {
                         datasets: [{
+                            type: 'scatter',
+                            data: {{ eff | safe }},
+                            backgroundColor: 'red',
+                            showLine: true,
+                            borderColor: 'rgba(200, 0, 0, 1)'
+                        }, {
+                            type: 'scatter',
                             label: 'Volatility, Return',
                             data: {{ rand | safe }},
                             backgroundColor: {{ color | safe }},
-                            showLine: false,
+                            showLine: false
                         }]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Efficient frontier'
+                            },
+                        },
                     }
                 });
             </script>

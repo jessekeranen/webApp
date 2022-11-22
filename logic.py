@@ -1,11 +1,12 @@
 import pandas as pd
 import yfinance as yf
 import numpy as np
+from scipy.optimize import minimize
 
 
 def getdata(names, interv):
     tickers = ' '.join(names)
-    df = yf.download(tickers=tickers, interval=interv, group_by="ticker", auto_adjust=False, prepost=False, threads=10)
+    df = yf.download(tickers=tickers, interval=interv, group_by="ticker", rounding=True, auto_adjust=False, prepost=False, threads=10)
     df.reset_index(inplace=True)
     df.dropna(inplace=True)
 
@@ -24,8 +25,6 @@ def getdata(names, interv):
     prices = df2.values
     prices = np.transpose(np.asmatrix(prices, dtype=str)).tolist()
 
-    dr_rounded = df.round(2).astype(object)
-
     ret = stock_returns(df)
     sd = stock_std(df)
     cov = cov_matrix(pd.pivot_table(df, index=['Date'], columns='Name', values='Return').reset_index())
@@ -39,10 +38,41 @@ def getdata(names, interv):
 
         d.append([temp_sd, temp_ret, portfolio_sharpe(temp_ret, temp_sd)])
     ret_sd = np.array(d)[:, 0:2].tolist()
-    sharpe = color_codes(np.array(d)[:, 2].tolist())
+    color = color_codes(np.array(d)[:, 2].tolist())
+
+    weights = []
+    for j in range(len(names)):
+        weights.append(1/len(names))
+    weights = np.array(weights)
+
+    sharpe_portfolio = minimize(
+        lambda x: penalized_function(x, optimization, ret, cov.values, -2, 100), weights, method='Nelder-Mead',
+        options={'disp': False})  # calculates portfolio with highest sharpe ratio
 
 
-    return dr_rounded, labels, prices, tickers, ret_sd, sharpe
+    min_var_portfolio = minimize(
+        lambda x: penalized_function(x, optimization, ret, cov.values, -1, 100), weights, method='Nelder-Mead',
+        options={'disp': False})
+
+
+    min_var_port_ret = portfolio_return(ret, min_var_portfolio.x)
+    max_ret = max(ret)
+
+
+    x = range(20)
+    array = []
+    for n in x:
+        res = minimize(
+            lambda x: penalized_function(x, optimization, ret, cov.values, (min_var_port_ret + n/len(x) ** 2  * (max_ret * 12 - min_var_port_ret)),
+                                         100), weights, method='Nelder-Mead', options={'disp': False})  # calculates portfolios for efficient frontier
+        array.append(res)
+
+    eff_frontier = []
+    for k in array:
+        eff_frontier.append([portfolio_std(cov, k.x), portfolio_return(ret, k.x)])
+    eff_frontier = np.array(eff_frontier).tolist()
+
+    return df, labels, prices, tickers, ret_sd, color, eff_frontier
 
 
 def stock_returns(df):
@@ -57,12 +87,15 @@ def cov_matrix(df):
     return df.cov()
 
 
+'''
+    Calculates mean portfolio return. Basically weighted sum of the means of the asset returns.
+'''
 def portfolio_return(returns, weights):
-    return np.dot(returns, weights)
+    return np.dot(returns, weights) * 12
 
 
 def portfolio_std(cov_mat, weights):
-    return np.sqrt(np.dot(weights.T, (np.dot(cov_mat, weights))))
+    return np.sqrt(np.dot(weights.T, (np.dot(cov_mat, weights))) * 12)
 
 
 def random_weights(n):
@@ -82,7 +115,72 @@ def color_codes(array):
     return d
 
 
-dt, lab, val, tick, rand, sharpe = getdata(["AAPL", "MSFT", "META", "AMZN", "NFLX"], "1mo")
+'''
+    Method that is used to decide what is optimized. If target value is -1 we try to find portfolio that minimizes variance.
+    If target value is -2 we want to find portfolio that has greatest trade of between return and variance aka sharpe ratio.
+    If target value is something else we want to find portfolio that has that return but minimum variance.
+
+    Parameters
+    ----------
+    profits = array of the logarithmic returns
+    weight  = array of the weights of different assets
+    cov     = covariance matrix
+    target  = indicates what we want to optimize
+
+    Returns 
+    ----------
+    Variance or sharpe ratio of the function depending on value of target
+'''
+def optimization(profits, weights, cov, target):
+    if target == -1:
+        return portfolio_std(cov, weights), weights, [np.sum(weights) - 1]
+    if target == -2:
+        return -portfolio_return(profits, weights) / portfolio_std(cov, weights), weights, [np.sum(weights) - 1]
+    else:
+        return portfolio_std(cov, weights), weights, [np.sum(weights) - 1, portfolio_return(profits, weights) - target]
+
+
+'''
+    Calculates value of the penalized function. For each set of weights penalty term is added if weights violate constraints.
+
+    Parameters
+    ----------
+    x       = array of weights
+    f       = function that is optimized
+    profits = array of the logarithmic returns
+    cov     = covariance matrix
+    target  = indicates what we want to optimize
+    r       = penalty coefficient
+
+    Returns 
+    -----------
+    Value of the penalized function
+'''
+def penalized_function(x, f, profits, cov, target, r):
+    return f(profits, x, cov, target)[0] + r * alpha(profits, x, f, cov, target)
+
+
+'''
+    Calculates the values of the penalty function. If the given point violates the constraints, value of the penalty function is increased.
+
+    Parameters
+    ----------
+    profits = array of the logarithmic returns
+    x       = array of weights
+    f       = function that is optimized
+    cov     = covariance matrix
+    target  = indicates what we want to optimize
+
+    Returns 
+    ----------
+    Value of the penalty term
+'''
+def alpha(profits, x, f, cov, target):
+    (_, ieq, eq) = f(profits, x, cov, target)
+    return sum([min([0, ieq_j])**2 for ieq_j in ieq]) + sum([eq_k ** 2 for eq_k in eq])
+
+
+dt, lab, val, tick, rand, sharpe, eff_frontier = getdata(["AAPL", "MSFT", "META", "AMZN", "NFLX"], "1mo")
 arr = random_weights(5)
 arr
 
