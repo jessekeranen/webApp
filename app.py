@@ -17,8 +17,8 @@ def calculate():
     start = str(request.form["start"])
     end = str(request.form["end"])
     interval = str(request.form["interval"])
-    df, labels, prices, tickers, rand, color, eff_frontier = logic.getdata(names, interval)
+    df, labels, prices, tickers, rand, color, eff_frontier, weights = logic.getdata(names, interval)
     flash("You chose: " + tickers + " from" + start + " to " + end + " with interval of " + interval)
 
     return render_template("index.html", tables=[df.tail(10).to_html(classes='data')], titles=df.columns.values,
-                           labels=labels, values=prices, names=names, rand=rand, color=color, eff=eff_frontier)
+                           labels=labels, values=prices, names=names, rand=rand, color=color, eff=eff_frontier, weights=weights)

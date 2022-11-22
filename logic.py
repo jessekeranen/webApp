@@ -56,23 +56,26 @@ def getdata(names, interv):
 
 
     min_var_port_ret = portfolio_return(ret, min_var_portfolio.x)
-    max_ret = max(ret)
+    max_ret = max(ret) * 12
 
 
-    x = range(20)
     array = []
-    for n in x:
+    final_weights = []
+    for n in range(20):
         res = minimize(
-            lambda x: penalized_function(x, optimization, ret, cov.values, (min_var_port_ret + n/len(x) ** 2  * (max_ret * 12 - min_var_port_ret)),
+            lambda x: penalized_function(x, optimization, ret, cov.values, (min_var_port_ret + ((n+1)/20) ** 2 * (max_ret - min_var_port_ret)),
                                          100), weights, method='Nelder-Mead', options={'disp': False})  # calculates portfolios for efficient frontier
         array.append(res)
+        final_weights.append(res.x)
+    final_weights = np.round(final_weights, 2)
+    final_weights = np.array(final_weights).T.tolist()
 
     eff_frontier = []
     for k in array:
         eff_frontier.append([portfolio_std(cov, k.x), portfolio_return(ret, k.x)])
     eff_frontier = np.array(eff_frontier).tolist()
 
-    return df, labels, prices, tickers, ret_sd, color, eff_frontier
+    return df, labels, prices, tickers, ret_sd, color, eff_frontier, final_weights
 
 
 def stock_returns(df):
@@ -180,7 +183,7 @@ def alpha(profits, x, f, cov, target):
     return sum([min([0, ieq_j])**2 for ieq_j in ieq]) + sum([eq_k ** 2 for eq_k in eq])
 
 
-dt, lab, val, tick, rand, sharpe, eff_frontier = getdata(["AAPL", "MSFT", "META", "AMZN", "NFLX"], "1mo")
+dt, lab, val, tick, rand, sharpe, eff_frontier, jk = getdata(["AAPL", "MSFT", "META", "AMZN", "NFLX"], "1mo")
 arr = random_weights(5)
 arr
 
