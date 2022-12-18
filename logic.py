@@ -5,7 +5,10 @@ from scipy.optimize import minimize
 
 
 def getdata(names, interv):
-    tickers = ' '.join(names)
+    tickers = check_tickers(names)
+
+    tickers = ' '.join(tickers).split()
+    tickers.sort()
     df = yf.download(tickers=tickers, interval=interv, group_by="ticker", rounding=True, auto_adjust=False, prepost=False, threads=10)
     df.reset_index(inplace=True)
     df.dropna(inplace=True)
@@ -31,7 +34,7 @@ def getdata(names, interv):
 
     d = []
     for i in range(1000):
-        wght = random_weights(len(names))
+        wght = random_weights(len(tickers))
 
         temp_ret = portfolio_return(ret, wght)
         temp_sd = portfolio_std(cov, wght)
@@ -41,8 +44,8 @@ def getdata(names, interv):
     color = color_codes(np.array(d)[:, 2].tolist())
 
     weights = []
-    for j in range(len(names)):
-        weights.append(1/len(names))
+    for j in range(len(tickers)):
+        weights.append(1/len(tickers))
     weights = np.array(weights)
 
     sharpe_portfolio = minimize(
@@ -182,8 +185,20 @@ def alpha(profits, x, f, cov, target):
     (_, ieq, eq) = f(profits, x, cov, target)
     return sum([min([0, ieq_j])**2 for ieq_j in ieq]) + sum([eq_k ** 2 for eq_k in eq])
 
+def check_tickers(tickers):
+    existing_tickers = []
+    for ticker in tickers:
+        try:
+            if yf.Ticker(ticker).isin == '-':
+                raise ValueError()
+            existing_tickers.append(ticker)
+        except:
+            continue
 
-dt, lab, val, tick, rand, sharpe, eff_frontier, jk = getdata(["AAPL", "MSFT", "META", "AMZN", "NFLX"], "1mo")
+    return existing_tickers
+
+
+dt, lab, val, tick, rand, sharpe, eff_frontier, jk = getdata(["", "AAPL", "NLFX","MSFT", "META"], "1mo")
 arr = random_weights(5)
 arr
 

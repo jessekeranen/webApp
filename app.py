@@ -12,13 +12,13 @@ def hello():
 
 @app.route("/echo", methods=['POST', 'GET'])
 def calculate():
-    names = [str(request.form["name1"]), str(request.form["name2"]), str(request.form["name3"]),
-             str(request.form["name4"]), str(request.form["name5"])]
+    names = [str(request.form["name1"]) or "", str(request.form["name2"]) or "", str(request.form["name3"]) or "",
+             str(request.form["name4"]) or "", str(request.form["name5"]) or ""]
     start = str(request.form["start"])
     end = str(request.form["end"])
     interval = str(request.form["interval"])
     df, labels, prices, tickers, rand, color, eff_frontier, weights = logic.getdata(names, interval)
-    flash("You chose: " + tickers + " from" + start + " to " + end + " with interval of " + interval)
+    flash("You chose: " + str(tickers) + " from" + start + " to " + end + " with interval of " + interval)
 
     return render_template("index.html", tables=[df.tail(10).to_html(classes='data')], titles=df.columns.values,
-                           labels=labels, values=prices, names=names, rand=rand, color=color, eff=eff_frontier, weights=weights)
+                           labels=labels, values=prices, names=tickers, rand=rand, color=color, eff=eff_frontier, weights=weights)
