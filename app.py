@@ -22,4 +22,4 @@ def calculate():
     flash("You chose: " + str(tickers) + " from" + start + " to " + end + " with interval of " + interval)
 
     return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)], tables2=[info.to_html()], labels=labels,
-                           values=prices, names=tickers, rand=rand, color=color, eff=eff_frontier, weights=weights)
+                           values=prices, names=tickers, rand=rand, color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list())

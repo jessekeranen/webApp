@@ -47,15 +47,21 @@
             </div>
         </div>
         <div>
-
-            <div>
-                <canvas id="firstChart"></canvas>
+            <div class="chart1">
+                <div class="line">
+                    <canvas id="firstChart"></canvas>
+                </div>
+                <div class="pie">
+                    <canvas id="pie-chart"></canvas>
+                </div>
             </div>
-            <div>
-                <canvas id="secondChart"></canvas>
-            </div>
-            <div>
-                <canvas id="thirdChart"></canvas>
+            <div class="chart2">
+                <div class="area">
+                    <canvas id="thirdChart"></canvas>
+                </div>
+                <div class="frontier">
+                    <canvas id="secondChart"></canvas>
+                </div>
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -69,14 +75,15 @@
                 };
                 var array = {{ values | safe }};
                 var names = {{ names | safe }};
+                var allocation = {{ allocations | safe }}
 
-                array.forEach(function (a, i) {
-                    lineChartData.datasets.push({
-                        label: names[i],
-                        borderline: 1,
-                        data: a
+                    array.forEach(function (a, i) {
+                        lineChartData.datasets.push({
+                            label: names[i],
+                            borderline: 1,
+                            data: a
+                        });
                     });
-                });
 
                 new Chart(ctx, {
                     type: 'line',
@@ -153,6 +160,25 @@
                                 text: ''
                             },
                         },
+                    }
+                });
+
+                const ctx4 = document.getElementById('pie-chart').getContext("2d");
+
+                new Chart(ctx4, {
+                    type: 'pie',
+                    data: {
+                        labels: names,
+                        datasets: [{
+                            label: "Weights",
+                            data: allocation
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Pie cahrt'
+                        }
                     }
                 });
 

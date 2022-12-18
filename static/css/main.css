@@ -6,6 +6,30 @@
     width: 75%;
 }
 
+.chart1 {
+    display: flex;
+}
+
+.line {
+    width: 100%;
+}
+
+.frontier {
+    width: 100%;
+}
+
+.chart2 {
+    display: flex;
+}
+
+.area {
+    width: 100%;
+}
+
+.pie {
+    width: 50%;
+}
+
 table {
     border: none;
     border-collapse: collapse;
