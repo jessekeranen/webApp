@@ -8,37 +8,44 @@
 <body>
 <h1>Still under development</h1>
 <div class="whole">
-    <div class="left">
-        <form action="/echo" method="post">
-            <label for="name1">Company Ticker:</label>
-            <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
-            <label for="name2">Company Ticker:</label>
-            <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
-            <label for="name3">Company Ticker:</label>
-            <input type="text" id="name3" placeholder="IBM" name="name3"><br>
-            <label for="name4">Company Ticker:</label>
-            <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
-            <label for="name5">Company Ticker:</label>
-            <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
-            <label for="start">Start Date:</label>
-            <input type="datetime-local" id="start" name="start"><br>
-            <label for="end">End Date:</label>
-            <input type="datetime-local" id="end" name="end"><br><br>
+    <div>
+        <div class="flex">
+            <form action="/echo" method="post">
+                <label for="name1">Company Ticker:</label>
+                <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
+                <label for="name2">Company Ticker:</label>
+                <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
+                <label for="name3">Company Ticker:</label>
+                <input type="text" id="name3" placeholder="IBM" name="name3"><br>
+                <label for="name4">Company Ticker:</label>
+                <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
+                <label for="name5">Company Ticker:</label>
+                <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
+                <label for="start">Start Date:</label>
+                <input type="datetime-local" id="start" name="start"><br>
+                <label for="end">End Date:</label>
+                <input type="datetime-local" id="end" name="end"><br><br>
 
-            <label for="interval">Interval:</label>
-            <select name="interval" id="interval">
-                <option value="1mo">Month</option>
-                <option value="1wk">Week</option>
-                <option value="1d">Day</option>
-                <option value="1h">Hour</option>
-            </select><br><br>
+                <label for="interval">Interval:</label>
+                <select name="interval" id="interval">
+                    <option value="1mo">Month</option>
+                    <option value="1wk">Week</option>
+                    <option value="1d">Day</option>
+                    <option value="1h">Hour</option>
+                </select><br><br>
 
-            <input type="submit" value="Submit"><br><br>
+                <input type="submit" value="Submit"><br><br>
 
-            {% for message in get_flashed_messages() %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        </form>
+                {% for message in get_flashed_messages() %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </form>
+            <div class="table2">
+                {% for table in tables2 %}
+                    {{ table|safe }}
+                {% endfor %}
+            </div>
+        </div>
         <div>
 
             <div>
@@ -131,30 +138,29 @@
                     });
                 });
 
-                    new Chart(ctx3, {
-                        type: 'line',
-                        data: lineChartData2,
-                        options: {
-                            scales: {
-                                yAxes: {
-                                    stacked: true
-                                }
+                new Chart(ctx3, {
+                    type: 'line',
+                    data: lineChartData2,
+                    options: {
+                        scales: {
+                            yAxes: {
+                                stacked: true
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: ''
                             },
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: ''
-                                },
-                            },
-                        }
-                    });
+                        },
+                    }
+                });
 
             </script>
         </div>
     </div>
-    <div class="right">
-        {% for table in tables %}
-            {{ titles[loop.index] }}
+    <div>
+        {% for table in tables1 %}
             {{ table|safe }}
         {% endfor %}
     </div>

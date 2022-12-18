@@ -1,6 +1,14 @@
+.flex {
+    display: flex;
+}
+
+.table2 {
+    width: 75%;
+}
+
 table {
     border: none;
-  border-collapse: collapse;
+    border-collapse: collapse;
     margin: 0px 0;
     font-size: 0.9em;
     font-family: sans-serif;
