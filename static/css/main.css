@@ -1,5 +1,20 @@
+body {
+    margin: 0 0 0 0;
+}
+
+.whole {
+    margin: 1em 1em 1em 1em;
+}
+
 .flex {
     display: flex;
+}
+
+.choices {
+    background-color: #f3f3f3;
+    padding: 1em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    margin-right: 1em;
 }
 
 .table2 {
@@ -28,6 +43,21 @@
 
 .pie {
     width: 50%;
+}
+
+.head {
+    display: flex;
+    background-color: #009879;
+}
+
+.header{
+    padding-left: 1em;
+    color: #ffffff;
+}
+.link{
+    margin-left: auto;
+    align-self: center;
+    padding-right: 1em;
 }
 
 table {
