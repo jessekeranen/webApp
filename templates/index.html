@@ -12,7 +12,7 @@
             <h1>Still under development</h1>
         </div>
         <div class="link">
-            <a href="https://www.linkedin.com/in/jesse-ker%C3%A4nen-4737a8159/">LinkeIn</a>
+            <a href="https://www.linkedin.com/in/jesse-ker%C3%A4nen-4737a8159/">LinkedIn</a>
         </div>
     </div>
 </header>
@@ -98,6 +98,14 @@
                     type: 'line',
                     data: lineChartData,
                     options: {
+                        scales: {
+                            y: {
+                                title:{
+                                    display: true,
+                                    text: 'Price'
+                                }
+                            }
+                        },
                         plugins: {
                             title: {
                                 display: true,
@@ -117,7 +125,8 @@
                             data: {{ eff | safe }},
                             backgroundColor: 'red',
                             showLine: true,
-                            borderColor: 'rgba(200, 0, 0, 1)'
+                            borderColor: 'rgba(200, 0, 0, 1)',
+                            pointRadius: 0
                         }, {
                             type: 'scatter',
                             label: 'Volatility, Return',
@@ -127,6 +136,20 @@
                         }]
                     },
                     options: {
+                        scales: {
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Exp. Return'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Standard deviation'
+                                }
+                            }
+                        },
                         plugins: {
                             title: {
                                 display: true,
@@ -159,8 +182,18 @@
                     data: lineChartData2,
                     options: {
                         scales: {
-                            yAxes: {
-                                stacked: true
+                            y: {
+                                stacked: true,
+                                title: {
+                                    display: true,
+                                    text: 'Cumul. Weigth'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Exp. Return'
+                                }
                             }
                         },
                         plugins: {
@@ -169,6 +202,11 @@
                                 text: 'Weights for different expected returns'
                             },
                         },
+                        elements: {
+                            point: {
+                                radius: 0
+                            }
+                        }
                     }
                 });
 

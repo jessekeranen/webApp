@@ -21,5 +21,6 @@ def calculate():
     df, labels, prices, tickers, rand, color, eff_frontier, weights, info = logic.getdata(names, interval)
     flash("You chose: " + str(tickers) + " from" + start + " to " + end + " with interval of " + interval)
 
-    return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)], tables2=[info.to_html()], labels=labels,
-                           values=prices, names=tickers, rand=rand, color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list())
+    return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
+                           tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
+                           color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list())

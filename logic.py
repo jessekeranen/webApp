@@ -1,3 +1,4 @@
+import numpy
 import pandas as pd
 import yfinance as yf
 import numpy as np
@@ -95,8 +96,14 @@ def efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights):
                                          100), weights, method='Nelder-Mead',
             options={'disp': False})  # calculates portfolios for efficient frontier
         array.append(res)
+
+        # could be that despite restriction slightly negative weight is returned
+        res.x[numpy.where(res.x < 0)] = 0
+        res.x =  np.round(res.x, 2)
+        res.x = res.x / np.sum(res.x)
         final_weights.append(res.x)
-    final_weights = np.round(final_weights, 2)
+
+
     final_weights = np.array(final_weights).T.tolist()
 
     eff_frontier = []
