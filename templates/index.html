@@ -16,230 +16,289 @@
         </div>
     </div>
 </header>
-<div class="whole">
-    <div>
-        <div class="flex">
-            <form class="choices" action="/echo" method="post">
-                <label for="name1">Company Ticker:</label>
-                <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
-                <label for="name2">Company Ticker:</label>
-                <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
-                <label for="name3">Company Ticker:</label>
-                <input type="text" id="name3" placeholder="IBM" name="name3"><br>
-                <label for="name4">Company Ticker:</label>
-                <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
-                <label for="name5">Company Ticker:</label>
-                <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
-                <label for="start">Start Date:</label>
-                <input type="datetime-local" id="start" name="start"><br>
-                <label for="end">End Date:</label>
-                <input type="datetime-local" id="end" name="end"><br><br>
+<div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'portfolio')">Portfolio</button>
+    <button class="tablinks" onclick="openCity(event, 'stocks')">Stocks</button>
+</div>
+<div>
+    <div class="flex">
+        <form class="choices" action="/echo" method="post">
+            <label for="name1">Company Ticker:</label>
+            <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
+            <label for="name2">Company Ticker:</label>
+            <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
+            <label for="name3">Company Ticker:</label>
+            <input type="text" id="name3" placeholder="IBM" name="name3"><br>
+            <label for="name4">Company Ticker:</label>
+            <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
+            <label for="name5">Company Ticker:</label>
+            <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
+            <label for="start">Start Date:</label>
+            <input type="datetime-local" id="start" name="start"><br>
+            <label for="end">End Date:</label>
+            <input type="datetime-local" id="end" name="end"><br><br>
 
-                <label for="interval">Interval:</label>
-                <select name="interval" id="interval">
-                    <option value="1mo">Month</option>
-                    <option value="1wk">Week</option>
-                    <option value="1d">Day</option>
-                    <option value="1h">Hour</option>
-                </select><br><br>
+            <label for="interval">Interval:</label>
+            <select name="interval" id="interval">
+                <option value="1mo">Month</option>
+                <option value="1wk">Week</option>
+                <option value="1d">Day</option>
+                <option value="1h">Hour</option>
+            </select><br><br>
 
-                <input type="submit" value="Submit"><br><br>
+            <input type="submit" value="Submit"><br><br>
 
-                {% for message in get_flashed_messages() %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </form>
-            <div class="table2">
-                {% for table in tables2 %}
-                    {{ table|safe }}
-                {% endfor %}
-            </div>
-        </div>
-        <div>
-            <div class="chart1">
-                <div class="line">
-                    <canvas id="firstChart"></canvas>
-                </div>
-                <div class="pie">
-                    <canvas id="pie-chart"></canvas>
-                </div>
-            </div>
-            <div class="chart2">
-                <div class="area">
-                    <canvas id="thirdChart"></canvas>
-                </div>
-                <div class="frontier">
-                    <canvas id="secondChart"></canvas>
-                </div>
-            </div>
-
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-            <script>
-                const ctx = document.getElementById('firstChart').getContext("2d");
-
-                var lineChartData = {
-                    labels: {{ labels | safe }},
-                    datasets: []
-                };
-                var array = {{ values | safe }};
-                var names = {{ names | safe }};
-                var allocation = {{ allocations | safe }}
-
-                    array.forEach(function (a, i) {
-                        lineChartData.datasets.push({
-                            label: names[i],
-                            borderline: 1,
-                            data: a
-                        });
-                    });
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: lineChartData,
-                    options: {
-                        scales: {
-                            y: {
-                                title:{
-                                    display: true,
-                                    text: 'Price'
-                                }
-                            }
-                        },
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Line chart of stock prices within portfolio'
-                            },
-                        },
-                    }
-                });
-
-                const ctx2 = document.getElementById('secondChart').getContext("2d");
-
-                new Chart(ctx2, {
-                    data: {
-                        datasets: [{
-                            label: 'Efficient frontier',
-                            type: 'scatter',
-                            data: {{ eff | safe }},
-                            backgroundColor: 'red',
-                            showLine: true,
-                            borderColor: 'rgba(200, 0, 0, 1)',
-                            pointRadius: 0
-                        }, {
-                            type: 'scatter',
-                            label: 'Volatility, Return',
-                            data: {{ rand | safe }},
-                            backgroundColor: {{ color | safe }},
-                            showLine: false
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Exp. Return'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Standard deviation'
-                                }
-                            }
-                        },
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Efficient frontier'
-                            },
-                        },
-                    }
-                });
-
-                const ctx3 = document.getElementById('thirdChart').getContext("2d");
-
-                var lineChartData2 = {
-                    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-                    datasets: []
-                };
-
-                var weights = {{ weights | safe }};
-
-                weights.forEach(function (a, i) {
-                    lineChartData2.datasets.push({
-                        label: names[i],
-                        borderline: 1,
-                        fill: true,
-                        data: a
-                    });
-                });
-
-                new Chart(ctx3, {
-                    type: 'line',
-                    data: lineChartData2,
-                    options: {
-                        scales: {
-                            y: {
-                                stacked: true,
-                                title: {
-                                    display: true,
-                                    text: 'Cumul. Weigth'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Exp. Return'
-                                }
-                            }
-                        },
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Weights for different expected returns'
-                            },
-                        },
-                        elements: {
-                            point: {
-                                radius: 0
-                            }
-                        }
-                    }
-                });
-
-                const ctx4 = document.getElementById('pie-chart').getContext("2d");
-
-                new Chart(ctx4, {
-                    type: 'pie',
-                    data: {
-                        labels: names,
-                        datasets: [{
-                            label: "Weights",
-                            data: allocation
-                        }]
-                    },
-                    options: {
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Pie chart of weights in sharpe portfolio'
-                            }
-                        }
-                    }
-                });
-
-            </script>
+            {% for message in get_flashed_messages() %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </form>
+        <div class="table2">
+            {% for table in tables2 %}
+                {{ table|safe }}
+            {% endfor %}
         </div>
     </div>
+    <div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </div>
+</div>
+<div id="portfolio" class="tabcontent">
+    <div class="chart1">
+        <div class="pie">
+            <canvas id="pie-chart"></canvas>
+        </div>
+        <div class="bar">
+            <canvas id="bar-chart"></canvas>
+        </div>
+    </div>
+    <div class="chart2">
+        <div class="area">
+            <canvas id="thirdChart"></canvas>
+        </div>
+        <div class="frontier">
+            <canvas id="secondChart"></canvas>
+        </div>
+    </div>
+</div>
+<div id="stocks" class="tabcontent">
+    <div class="line">
+        <canvas id="firstChart"></canvas>
+    </div>
+</div>
+<div class="whole">
     <div>
         {% for table in tables1 %}
             {{ table|safe }}
         {% endfor %}
     </div>
 </div>
+<script>
+    const ctx = document.getElementById('firstChart').getContext("2d");
 
+    var lineChartData = {
+        labels: {{ labels | safe }},
+        datasets: []
+    };
+    var array = {{ values | safe }};
+    var names = {{ names | safe }};
+    var allocation = {{ allocations | safe }};
+    var profits = {{ yearly_returns | safe }};
+
+    array.forEach(function (a, i) {
+        lineChartData.datasets.push({
+            label: names[i],
+            borderline: 1,
+            data: a
+        });
+    });
+
+    //var example = [55, -49, 44, -24, 15];
+    var barChartData = Array();
+    var barChartLabels = Array();
+    var barChartColors = Array();
+
+    for (let i = 0; i < 6; i++) {
+        barChartData[i] = profits[i];
+        barChartLabels[i] = names[i];
+        barChartColors[i] = color(profits[i]);
+    }
+
+    const ctx5 = document.getElementById('bar-chart').getContext("2d");
+
+    new Chart(ctx5, {
+        type: "bar",
+        data: {
+            labels: barChartLabels,
+            datasets: [{
+                label: 'Portfolio yearly return',
+                backgroundColor: barChartColors,
+                data: barChartData
+            }]
+        },
+    });
+
+    new Chart(ctx, {
+        type: 'line',
+        data: lineChartData,
+        options: {
+            scales: {
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Price'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Line chart of stock prices within portfolio'
+                },
+            },
+        }
+    });
+
+    const ctx2 = document.getElementById('secondChart').getContext("2d");
+
+    new Chart(ctx2, {
+        data: {
+            datasets: [{
+                label: 'Efficient frontier',
+                type: 'scatter',
+                data: {{ eff | safe }},
+                backgroundColor: 'red',
+                showLine: true,
+                borderColor: 'rgba(200, 0, 0, 1)',
+                pointRadius: 0
+            }, {
+                type: 'scatter',
+                label: 'Volatility, Return',
+                data: {{ rand | safe }},
+                backgroundColor: {{ color | safe }},
+                showLine: false
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Exp. Return'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Standard deviation'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Efficient frontier'
+                },
+            },
+        }
+    });
+
+    const ctx3 = document.getElementById('thirdChart').getContext("2d");
+
+    var lineChartData2 = {
+        labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        datasets: []
+    };
+
+    var weights = {{ weights | safe }};
+
+    weights.forEach(function (a, i) {
+        lineChartData2.datasets.push({
+            label: names[i],
+            borderline: 1,
+            fill: true,
+            data: a
+        });
+    });
+
+    new Chart(ctx3, {
+        type: 'line',
+        data: lineChartData2,
+        options: {
+            scales: {
+                y: {
+                    stacked: true,
+                    title: {
+                        display: true,
+                        text: 'Cumul. Weigth'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Exp. Return'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Weights for different expected returns'
+                },
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            }
+        }
+    });
+
+    const ctx4 = document.getElementById('pie-chart').getContext("2d");
+
+    new Chart(ctx4, {
+        type: 'pie',
+        data: {
+            labels: names,
+            datasets: [{
+                label: "Weights",
+                data: allocation
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Pie chart of weights in sharpe portfolio'
+                }
+            }
+        }
+    });
+
+    function color(ret) {
+        if (ret < 0) return 'rgba(200, 0, 0, 0.3)'
+        else return 'rgba(37, 65, 23, 0.3)'
+    }
+
+    function openCity(evt, cityName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
 </body>
 </html>

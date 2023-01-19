@@ -31,16 +31,22 @@ def getdata(names, interv):
         lambda x: penalized_function(x, optimization, ret, cov.values, -1, 100), weights, method='Nelder-Mead',
         options={'disp': False})
 
-    min_var_port_ret = portfolio_return(ret, min_var_portfolio.x)
+    min_var_port_ret = portfolio_return_yearly(ret, min_var_portfolio.x)
     max_ret = max(ret) * 12
 
     final_weights, eff_frontier = efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights)
 
-    info = {"Weight": sharpe_portfolio.x, "Company": tickers, "Return": ret.to_list(), "Std": sd.to_list()}
+
+    sharpe_port_ret_arr = portfolio_return_monthly(pd.pivot_table(df, index=['Date'], columns='Name', values='Adj Close').reset_index().set_index("Date").pct_change(), sharpe_portfolio.x)
+
+    sharpe_port_year_returns = year_returns(sharpe_port_ret_arr)
+    sharpe_port_year_returns = sharpe_port_year_returns[0].values.tolist()
+
+    info = {"Weight": sharpe_portfolio.x, "Company": tickers, "Return": ret.to_list(), "Std.": sd.to_list(), "Sharpe": (ret / sd).to_list()}
     info = pd.DataFrame(info)
     info = info.set_index("Company")
 
-    return df, labels, prices, tickers, ret_sd, color, eff_frontier, final_weights, info
+    return df, labels, prices, tickers, ret_sd, color, eff_frontier, final_weights, info, sharpe_port_year_returns
 
 
 def stock_information(tickers, interval):
@@ -76,7 +82,7 @@ def random_portfolios(tickers, ret, cov):
     for i in range(1000):
         wght = random_weights(len(tickers))
 
-        temp_ret = portfolio_return(ret, wght)
+        temp_ret = portfolio_return_yearly(ret, wght)
         temp_sd = portfolio_std(cov, wght)
 
         d.append([temp_sd, temp_ret, portfolio_sharpe(temp_ret, temp_sd)])
@@ -108,7 +114,7 @@ def efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights):
 
     eff_frontier = []
     for k in array:
-        eff_frontier.append([portfolio_std(cov, k.x), portfolio_return(ret, k.x)])
+        eff_frontier.append([portfolio_std(cov, k.x), portfolio_return_yearly(ret, k.x)])
     eff_frontier = np.array(eff_frontier).tolist()
 
     return final_weights, eff_frontier
@@ -130,9 +136,22 @@ def cov_matrix(df):
     Calculates mean portfolio return. Basically weighted sum of the means of the asset returns.
 '''
 
-
-def portfolio_return(returns, weights):
+def portfolio_return_yearly(returns, weights):
     return np.dot(returns, weights) * 12
+
+
+def portfolio_return_monthly(returns, weights):
+    temp = np.dot(returns, weights)
+    temp[0] = 0
+    temp = pd.DataFrame(temp)
+    temp = temp.set_index(returns.index)
+    return temp
+
+
+def year_returns(prices):
+    prices.index = pd.to_datetime(prices.index)
+    prices[0] = (1 + prices[0]).cumprod()
+    return prices[prices.index.month == 1].pct_change().dropna()
 
 
 def portfolio_std(cov_mat, weights):
@@ -179,9 +198,9 @@ def optimization(profits, weights, cov, target):
     if target == -1:
         return portfolio_std(cov, weights), weights, [np.sum(weights) - 1]
     if target == -2:
-        return -portfolio_return(profits, weights) / portfolio_std(cov, weights), weights, [np.sum(weights) - 1]
+        return -portfolio_return_yearly(profits, weights) / portfolio_std(cov, weights), weights, [np.sum(weights) - 1]
     else:
-        return portfolio_std(cov, weights), weights, [np.sum(weights) - 1, portfolio_return(profits, weights) - target]
+        return portfolio_std(cov, weights), weights, [np.sum(weights) - 1, portfolio_return_yearly(profits, weights) - target]
 
 
 '''
@@ -245,6 +264,6 @@ def check_tickers(tickers):
     return existing_tickers
 
 
-# dt, lab, val, tick, rand, sharpe, eff_frontier, jk, info = getdata(["", "AAPL", "NLFX", "MSFT", "META"], "1mo")
+# dt, lab, val, tick, rand, sharpe, eff_frontier, jk, info, year = getdata(["", "AAPL", "NLFX", "MSFT", "META"], "1mo")
 arr = random_weights(5)
 arr

@@ -43,7 +43,10 @@ body {
 }
 
 .pie {
-    width: 50%;
+    width: 30%;
+}
+.bar {
+    width: 100%;
 }
 
 .head {
@@ -100,4 +103,13 @@ table tbody tr:last-of-type {
 table tbody tr.active-row {
     font-weight: bold;
     color: #009879;
+}
+
+.tabcontent {
+  animation: fadeEffect 1s;
+}
+
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
