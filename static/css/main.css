@@ -3,7 +3,7 @@ body {
 }
 
 .whole {
-    margin: 1em 1em 1em 1em;
+    margin: 0.5em;
 }
 
 .flex {
@@ -26,27 +26,36 @@ body {
 }
 
 .line {
-    width: 100%;
+    margin: 0.5em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .frontier {
     width: 100%;
+    margin: 0.5em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .chart2 {
     display: flex;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
 }
 
 .area {
     width: 100%;
+    margin: 0.5em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .pie {
     width: 30%;
+    margin: 0.5em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .bar {
     width: 100%;
+    margin: 0.5em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .head {

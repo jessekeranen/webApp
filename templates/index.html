@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script> src = "https://cdn.jsdelivr.net/npm/chart.js"</script>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 </head>
 <body>
 <header>
@@ -60,6 +61,7 @@
     </div>
     <div>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     </div>
 </div>
 <div id="portfolio" class="tabcontent">
@@ -68,7 +70,7 @@
             <canvas id="pie-chart"></canvas>
         </div>
         <div class="bar">
-            <canvas id="bar-chart"></canvas>
+            <div id="bar-chart"></div>
         </div>
     </div>
     <div class="chart2">
@@ -82,7 +84,7 @@
 </div>
 <div id="stocks" class="tabcontent">
     <div class="line">
-        <canvas id="firstChart"></canvas>
+        <div id="firstChart"></div>
     </div>
 </div>
 <div class="whole">
@@ -93,26 +95,14 @@
     </div>
 </div>
 <script>
-    const ctx = document.getElementById('firstChart').getContext("2d");
-
-    var lineChartData = {
-        labels: {{ labels | safe }},
-        datasets: []
-    };
     var array = {{ values | safe }};
     var names = {{ names | safe }};
     var allocation = {{ allocations | safe }};
-    var profits = {{ yearly_returns | safe }};
+    //var profits = {{ yearly_returns | safe }};
+    var labels = {{ labels | safe }}
+    var profits = [0.1, 0.2, -0.1, 0, -0.4 ]
 
-    array.forEach(function (a, i) {
-        lineChartData.datasets.push({
-            label: names[i],
-            borderline: 1,
-            data: a
-        });
-    });
 
-    //var example = [55, -49, 44, -24, 15];
     var barChartData = Array();
     var barChartLabels = Array();
     var barChartColors = Array();
@@ -120,43 +110,47 @@
     for (let i = 0; i < 6; i++) {
         barChartData[i] = profits[i];
         barChartLabels[i] = names[i];
-        barChartColors[i] = color(profits[i]);
+        barChartColors[i] = color(profits[i])[0];
     }
 
-    const ctx5 = document.getElementById('bar-chart').getContext("2d");
+    const ctx5 = document.getElementById('bar-chart');
 
-    new Chart(ctx5, {
-        type: "bar",
-        data: {
-            labels: barChartLabels,
-            datasets: [{
-                label: 'Portfolio yearly return',
-                backgroundColor: barChartColors,
-                data: barChartData
-            }]
+    var data = [{
+        x: barChartLabels,
+        y: barChartData,
+        width: 0.5,
+        marker: {
+            color: barChartColors,
+            line: {
+                width: 1.5
+            }
         },
-    });
+        type: "bar"
+    }];
 
-    new Chart(ctx, {
-        type: 'line',
-        data: lineChartData,
-        options: {
-            scales: {
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Price'
-                    }
-                }
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Line chart of stock prices within portfolio'
-                },
-            },
+    Plotly.newPlot(ctx5, data);
+
+    var lineChartData = [];
+
+    array.forEach(function (a, i) {
+        lineChartData[i] = {
+            type: 'scatter',
+            name: names[i],
+            x: labels,
+            y: a
         }
     });
+
+    const ctx = document.getElementById('firstChart');
+    var layout = {
+        title: 'Line chart of stock prices within portfolio',
+        yaxis: {
+            type: 'log',
+            autorange: true
+        }
+    }
+
+    Plotly.newPlot(ctx, lineChartData, layout);
 
     const ctx2 = document.getElementById('secondChart').getContext("2d");
 
@@ -275,8 +269,8 @@
     });
 
     function color(ret) {
-        if (ret < 0) return 'rgba(200, 0, 0, 0.3)'
-        else return 'rgba(37, 65, 23, 0.3)'
+        if (ret < 0) return ['rgba(200, 0, 0, 0.3)', 'rgba(200, 0, 0)']
+        else return ['rgba(37, 65, 23, 0.3)', 'rgba(37, 65, 23)']
     }
 
     function openCity(evt, cityName) {
