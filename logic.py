@@ -34,19 +34,23 @@ def getdata(names, interv):
     min_var_port_ret = portfolio_return_yearly(ret, min_var_portfolio.x)
     max_ret = max(ret) * 12
 
-    final_weights, eff_frontier = efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights)
+    final_weights, eff_frontier, target_returns = efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights)
 
 
     sharpe_port_ret_arr = portfolio_return_monthly(pd.pivot_table(df, index=['Date'], columns='Name', values='Adj Close').reset_index().set_index("Date").pct_change(), sharpe_portfolio.x)
 
     sharpe_port_year_returns = year_returns(sharpe_port_ret_arr)
+    sharpe_port_year_dates = sharpe_port_year_returns.index
+    sharpe_port_year_dates = np.datetime_as_string(sharpe_port_year_dates, unit="Y")
+    sharpe_port_year_dates = sharpe_port_year_dates.tolist()
     sharpe_port_year_returns = sharpe_port_year_returns[0].values.tolist()
+
 
     info = {"Weight": sharpe_portfolio.x, "Company": tickers, "Return": ret.to_list(), "Std.": sd.to_list(), "Sharpe": (ret / sd).to_list()}
     info = pd.DataFrame(info)
     info = info.set_index("Company")
 
-    return df, labels, prices, tickers, ret_sd, color, eff_frontier, final_weights, info, sharpe_port_year_returns
+    return df, labels, prices, tickers, ret_sd, color, eff_frontier, final_weights, info, sharpe_port_year_returns, sharpe_port_year_dates, target_returns
 
 
 def stock_information(tickers, interval):
@@ -95,6 +99,7 @@ def random_portfolios(tickers, ret, cov):
 def efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights):
     array = []
     final_weights = []
+    target_returns = []
     for n in range(20):
         res = minimize(
             lambda x: penalized_function(x, optimization, ret, cov.values,
@@ -102,6 +107,7 @@ def efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights):
                                          100), weights, method='Nelder-Mead',
             options={'disp': False})  # calculates portfolios for efficient frontier
         array.append(res)
+        target_returns.append(round(min_var_port_ret + ((n + 1) / 20) ** 2 * (max_ret - min_var_port_ret), 2))
 
         # could be that despite restriction slightly negative weight is returned
         res.x[numpy.where(res.x < 0)] = 0
@@ -117,7 +123,7 @@ def efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights):
         eff_frontier.append([portfolio_std(cov, k.x), portfolio_return_yearly(ret, k.x)])
     eff_frontier = np.array(eff_frontier).tolist()
 
-    return final_weights, eff_frontier
+    return final_weights, eff_frontier, target_returns
 
 
 def stock_returns(df):

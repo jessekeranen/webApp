@@ -99,18 +99,20 @@
     var array = {{ values | safe }};
     var names = {{ names | safe }};
     var allocation = {{ allocations | safe }};
-    //var profits = {{ yearly_returns | safe }};
+    var profits = {{ yearly_returns | safe }};
     var labels = {{ labels | safe }}
-    var profits = [0.1, 0.2, -0.1, 0, -0.4 ]
+    //var profits = [0.1, 0.2, -0.1, 0, -0.4 ]
+    var target_returns = {{ target_returns | safe }}
+    var year_dates = {{ year_dates | safe }}
 
 
     var barChartData = Array();
     var barChartLabels = Array();
     var barChartColors = Array();
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < profits.length; i++) {
         barChartData[i] = profits[i];
-        barChartLabels[i] = names[i];
+        barChartLabels[i] = year_dates[i];
         barChartColors[i] = color(profits[i])[0];
     }
 
@@ -129,7 +131,23 @@
         type: "bar"
     }];
 
-    Plotly.newPlot(ctx5, data);
+    var layout = {
+        title: 'Historical yearly returns of the portfolio',
+        yaxis: {
+            autorange: true,
+            title: {
+                text: 'Return'
+            }
+        },
+        xaxis: {
+            title: {
+              text: 'Year'
+            }
+
+        }
+    }
+
+    Plotly.newPlot(ctx5, data, layout);
 
     var lineChartData = [];
 
@@ -143,7 +161,7 @@
     });
 
     const ctx = document.getElementById('firstChart');
-    var layout = {
+    var layout2 = {
         title: 'Line chart of stock prices within portfolio',
         yaxis: {
             type: 'log',
@@ -151,7 +169,7 @@
         }
     }
 
-    Plotly.newPlot(ctx, lineChartData, layout);
+    Plotly.newPlot(ctx, lineChartData, layout2);
 
     const ctx2 = document.getElementById('secondChart').getContext("2d");
 
@@ -200,7 +218,7 @@
     const ctx3 = document.getElementById('thirdChart').getContext("2d");
 
     var lineChartData2 = {
-        labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        labels: target_returns,
         datasets: []
     };
 
@@ -230,14 +248,14 @@
                 x: {
                     title: {
                         display: true,
-                        text: 'Exp. Return'
+                        text: 'Target Return'
                     }
                 }
             },
             plugins: {
                 title: {
                     display: true,
-                    text: 'Weights for different expected returns'
+                    text: 'Weights for different target returns'
                 },
             },
             elements: {

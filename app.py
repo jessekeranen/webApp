@@ -18,10 +18,10 @@ def calculate():
     end = str(request.form["end"])
     interval = str(request.form["interval"])
 
-    df, labels, prices, tickers, rand, color, eff_frontier, weights, info, yearly_returns = logic.getdata(names, interval)
+    df, labels, prices, tickers, rand, color, eff_frontier, weights, info, yearly_returns, year_dates, target_returns = logic.getdata(names, interval)
     flash("You chose: " + str(tickers) + " from" + start + " to " + end + " with interval of " + interval)
 
     return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
                            tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
                            color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),
-                           yearly_returns=yearly_returns[:-5])
+                           yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns)
