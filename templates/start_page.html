@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>Portfolio</title>
+    <link rel="shortcut icon" href="/pictures/favicon.png" type="image/png">
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+</head>
+<body class="body">
+<header>
+    <div class="head">
+        <div class="header">
+            <h1>Still under development</h1>
+        </div>
+        <div class="link">
+            <a href="https://www.linkedin.com/in/jesse-ker%C3%A4nen-4737a8159/">LinkedIn</a>
+        </div>
+    </div>
+</header>
+<div>
+    <div class="flex">
+        <form class="choices_start_page" action="/echo" method="post">
+            <label for="name1">Company Ticker:</label>
+            <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
+            <label for="name2">Company Ticker:</label>
+            <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
+            <label for="name3">Company Ticker:</label>
+            <input type="text" id="name3" placeholder="IBM" name="name3"><br>
+            <label for="name4">Company Ticker:</label>
+            <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
+            <label for="name5">Company Ticker:</label>
+            <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
+            <label for="start">Start Date:</label>
+            <input type="datetime-local" id="start" name="start"><br>
+            <label for="end">End Date:</label>
+            <input type="datetime-local" id="end" name="end"><br><br>
+
+            <label for="interval">Interval:</label>
+            <select name="interval" id="interval">
+                <option value="1mo">Month</option>
+                <option value="1wk">Week</option>
+                <option value="1d">Day</option>
+                <option value="1h">Hour</option>
+            </select><br><br>
+
+            <input type="submit" value="Submit"><br><br>
+                        <p><small>
+                            Stock data is obtained from Yahoo finance database. Please insert Yahoo tickers for stocks.
+                        </small>
+                    </p>
+        </form>
+    </div>
+</div>
+</body>
+</html>

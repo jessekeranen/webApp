@@ -36,7 +36,6 @@ def getdata(names, interv):
 
     final_weights, eff_frontier, target_returns = efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights)
 
-
     sharpe_port_ret_arr = portfolio_return_monthly(pd.pivot_table(df, index=['Date'], columns='Name', values='Adj Close').reset_index().set_index("Date").pct_change(), sharpe_portfolio.x)
 
     sharpe_port_year_returns = year_returns(sharpe_port_ret_arr)
@@ -44,7 +43,6 @@ def getdata(names, interv):
     sharpe_port_year_dates = np.datetime_as_string(sharpe_port_year_dates, unit="Y")
     sharpe_port_year_dates = sharpe_port_year_dates.tolist()
     sharpe_port_year_returns = sharpe_port_year_returns[0].values.tolist()
-
 
     info = {"Weight": sharpe_portfolio.x, "Company": tickers, "Return": ret.to_list(), "Std.": sd.to_list(), "Sharpe": (ret / sd).to_list()}
     info = pd.DataFrame(info)
@@ -73,8 +71,13 @@ def stock_information(tickers, interval):
 
 
 def data_for_price_chart(df):
-    df2 = pd.pivot_table(df, index=['Date'], columns='Name', values='Adj Close').reset_index()
+    df2 = df.copy()
+    df2["Cum. Return"] = df2.groupby("Name")['Return'].apply(lambda x: np.cumprod(1 + x))
+    df2 = pd.pivot_table(df2, index=['Date'], columns='Name', values='Cum. Return').reset_index()
     df2 = df2.iloc[:, df2.columns != 'Date']
+    df2.loc[-1] = [1] * len(df2.columns)  # adding a row
+    df2.index = df2.index + 1  # shifting index
+    df2 = df2.sort_index()
     prices = df2.values
     prices = np.transpose(np.asmatrix(prices, dtype=str)).tolist()
 
