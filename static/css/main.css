@@ -1,12 +1,13 @@
 body {
     margin: 0 0 0 0;
+    background-image: url("../pictures/titlis-2994226_1920.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 .body {
-    margin: 0 0 0 0;
     background-image: url("../pictures/munich-1480745_1920.png");
-    background-repeat: no-repeat;
-    background-size: cover;
 }
 
 input {
@@ -23,6 +24,7 @@ input {
 
 .choices {
     background-color: #f3f3f3;
+    opacity: 90%;
     padding: 1em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     margin: 0.5em 0.5em 0 0.5em;
@@ -33,6 +35,7 @@ input {
 .choices_start_page {
     background-color: #f3f3f3;
     border: solid #a6a6a6;
+    opacity: 90%;
     padding: 1em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     margin: auto;
@@ -52,12 +55,16 @@ input {
 .line {
     margin: 0.5em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: #f3f3f3;
+    opacity: 90%;
 }
 
 .frontier {
     width: 100%;
     margin: 0.5em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: #f3f3f3;
+    opacity: 90%;
 }
 
 .chart2 {
@@ -69,17 +76,23 @@ input {
     width: 100%;
     margin: 0.5em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: #f3f3f3;
+    opacity: 90%;
 }
 
 .pie {
     width: 30%;
     margin: 0.5em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: #f3f3f3;
+    opacity: 90%;
 }
 .bar {
     width: 100%;
     margin: 0.5em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: #f3f3f3;
+    opacity: 90%;
 }
 
 .head {
@@ -132,6 +145,10 @@ table tbody tr {
 
 table tbody tr:nth-of-type(even) {
     background-color: #f3f3f3;
+}
+
+table tbody tr:nth-of-type(odd) {
+    background-color: #ffffff;
 }
 
 table tbody tr:last-of-type {
