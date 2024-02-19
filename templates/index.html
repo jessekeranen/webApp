@@ -39,6 +39,7 @@
             <input type="datetime-local" id="start" name="start"><br>
             <label for="end">End Date:</label>
             <input type="datetime-local" id="end" name="end"><br><br>
+            <input type="hidden" name="page" value="index">
 
             <label for="interval">Interval:</label>
             <select name="interval" id="interval">
@@ -297,6 +298,22 @@
         // Show the current tab, and add an "active" class to the button that opened the tab
         document.getElementById(cityName).style.display = "block";
         evt.currentTarget.className += " active";
+    }
+
+    var error = {{ error | safe }};
+
+    if (error.length > 0) {
+        window.onload = () => sayHello(error);
+    }
+
+    function sayHello(error) {
+        var phrase = ""
+        if (error.length > 1) {
+            phrase = "Please review tickers. Could not find data for following tickers: "
+        }
+        else phrase = "Please review tickers. Could not find data for following ticker: "
+        var tickers = error.join(" ")
+        window.alert(phrase.concat(tickers))
     }
 </script>
 </body>
