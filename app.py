@@ -4,6 +4,7 @@ import logic
 app = Flask(__name__)
 app.secret_key = "jesse"
 
+
 @app.route('/')
 def hello():
     return render_template("start_page.html")
@@ -34,12 +35,22 @@ def calculate():
                 temp.append(element)
         return render_template(html, error=temp, len=len(names_wo_empty))
 
-    df, labels, prices, tickers, rand, color, eff_frontier, weights, info, yearly_returns, year_dates, target_returns = logic.getdata(names, interval)
+    df, labels, prices, tickers, rand, color, eff_frontier, weights, info, yearly_returns, year_dates, target_returns = logic.getdata(
+        names, interval)
+
+    volume = logic.get_volume(df, names_wo_empty[0])
+    high = logic.get_high(df, names_wo_empty[0])
+    low = logic.get_low(df, names_wo_empty[0])
+    open = logic.get_open(df, names_wo_empty[0])
+    close = logic.get_close(df, names_wo_empty[0])
+    ma20 = logic.get_moving_average(df, names_wo_empty[0], 20)
+    ma5 = logic.get_moving_average(df, names_wo_empty[0], 5)
 
     return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
                            tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
                            color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),
-                           yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns, error=[])
+                           yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns,
+                           volume=volume, high=high, low=low, open=open, close=close, ma20=ma20, ma5=ma5, error=[])
 
 
 @app.errorhandler(400)

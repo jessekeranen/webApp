@@ -32,7 +32,7 @@ def getdata(names, interv):
         options={'disp': False})
 
     min_var_port_ret = portfolio_return_yearly(ret, min_var_portfolio.x)
-    max_ret = max(ret) * 12
+    max_ret = max(np.array(ret_sd)[:, 1])
 
     final_weights, eff_frontier, target_returns = efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights)
 
@@ -273,6 +273,26 @@ def check_tickers(tickers):
     return existing_tickers
 
 
-# dt, lab, val, tick, rand, sharpe, eff_frontier, jk, info, year = getdata(["", "AAPL", "NLFX", "MSFT", "META"], "1mo")
-arr = random_weights(5)
-arr
+def get_volume(df, name):
+    return df.loc[df["Name"] == name, "Volume"].tolist()
+
+
+def get_high(df, name):
+    return df.loc[df["Name"] == name, "High"].tolist()
+
+
+def get_low(df, name):
+    return df.loc[df["Name"] == name, "Low"].tolist()
+
+
+def get_open(df, name):
+    return df.loc[df["Name"] == name, "Open"].tolist()
+
+
+def get_close(df, name):
+    return df.loc[df["Name"] == name, "Close"].tolist()
+
+
+def get_moving_average(df, name, interval):
+    return df.loc[df["Name"] == name, "Close"].rolling(window=interval).mean().fillna(0).tolist()
+

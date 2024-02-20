@@ -10,29 +10,30 @@ body {
     background-image: url("../pictures/munich-1480745_1920.png");
 }
 
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
 input {
     margin: 0.1em;
 }
 
-.whole {
-    margin: 0.5em;
-}
-
-.flex {
-    display: flex;
-}
-
 .choices {
+    border-radius: 25px;
     background-color: #f3f3f3;
     opacity: 90%;
     padding: 1em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     margin: 0.5em 0.5em 0 0.5em;
-    min-width: 30%;
+    width: 30%;
     float: left;
+    flex-grow: 1;
 }
 
 .choices_start_page {
+    border-radius: 25px;
     background-color: #f3f3f3;
     border: solid #a6a6a6;
     opacity: 90%;
@@ -41,58 +42,31 @@ input {
     margin: auto;
     margin-top: 5em;
     max-width: 30%;
+    flex-grow: 1;
 }
 
-.table2 {
-    width:100%;
-    margin: 0.5em 0.5em 0 0.5em;
+#summary {
+    flex-grow: 1;
 }
 
-.chart1 {
-    display: flex;
-}
-
-.line {
+#line, #frontier, #area, #pie, #bar, #stock, #trading {
     margin: 0.5em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     background-color: #f3f3f3;
     opacity: 90%;
+    flex-grow: 1;
 }
 
-.frontier {
-    width: 100%;
-    margin: 0.5em;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    background-color: #f3f3f3;
-    opacity: 90%;
+#area {
+    min-width: 50%;
 }
 
-.chart2 {
-    display: flex;
-    margin-bottom: 0.5em;
+#pie {
+    min-width: 30%;
 }
 
-.area {
-    width: 100%;
-    margin: 0.5em;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    background-color: #f3f3f3;
-    opacity: 90%;
-}
-
-.pie {
-    width: 30%;
-    margin: 0.5em;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    background-color: #f3f3f3;
-    opacity: 90%;
-}
-.bar {
-    width: 100%;
-    margin: 0.5em;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    background-color: #f3f3f3;
-    opacity: 90%;
+#bar {
+    min-width: 50%;
 }
 
 .head {
@@ -118,10 +92,13 @@ button {
 table {
     border: none;
     border-collapse: collapse;
-    margin: 0 0;
+    margin: 0.5em;
     font-size: 0.9em;
     font-family: sans-serif;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border-radius:6px;
+    border:solid black 1px;
+    flex-grow: 1;
 }
 
 table thead tr {
@@ -135,7 +112,6 @@ table td {
     text-align: left;
     border: none;
     padding: 10px 10px;
-    width: 5%;
 }
 
 table tbody tr {

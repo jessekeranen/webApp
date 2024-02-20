@@ -6,6 +6,7 @@
     <title>Portfolio</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <header>
@@ -19,89 +20,99 @@
     </div>
 </header>
 <div class="tab">
-    <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'portfolio')">Portfolio</button>
-    <button class="tablinks" onclick="openCity(event, 'stock')">Stock</button>
+    <button class="tablinks" id="defaultOpen" onclick="openView(event, ['pie', 'bar', 'area', 'frontier', 'summary'])">Portfolio</button>
+    <button class="tablinks" onclick="openView(event, ['stock'])">Stock</button>
+    <button class="tablinks" onclick="openView(event, ['trading'])">Trading view</button>
 </div>
-<div>
-    <div class="flex">
-        <form class="choices" action="/echo" method="post">
-            <label for="name1">Company Ticker:</label>
-            <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
-            <label for="name2">Company Ticker:</label>
-            <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
-            <label for="name3">Company Ticker:</label>
-            <input type="text" id="name3" placeholder="IBM" name="name3"><br>
-            <label for="name4">Company Ticker:</label>
-            <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
-            <label for="name5">Company Ticker:</label>
-            <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
-            <label for="start">Start Date:</label>
-            <input type="datetime-local" id="start" name="start"><br>
-            <label for="end">End Date:</label>
-            <input type="datetime-local" id="end" name="end"><br><br>
-            <input type="hidden" name="page" value="index">
+<div class="container">
+    <form class="choices" action="/echo" method="post">
+        <label for="name1">Company Ticker:</label>
+        <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
+        <label for="name2">Company Ticker:</label>
+        <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
+        <label for="name3">Company Ticker:</label>
+        <input type="text" id="name3" placeholder="IBM" name="name3"><br>
+        <label for="name4">Company Ticker:</label>
+        <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
+        <label for="name5">Company Ticker:</label>
+        <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
+        <label for="start">Start Date:</label>
+        <input type="datetime-local" id="start" name="start"><br>
+        <label for="end">End Date:</label>
+        <input type="datetime-local" id="end" name="end"><br><br>
+        <input type="hidden" name="page" value="index">
 
-            <label for="interval">Interval:</label>
-            <select name="interval" id="interval">
-                <option value="1mo">Month</option>
-                <option value="1wk">Week</option>
-                <option value="1d">Day</option>
-                <option value="1h">Hour</option>
-            </select><br><br>
+        <label for="interval">Interval:</label>
+        <select name="interval" id="interval">
+            <option value="1mo">Month</option>
+            <option value="1wk">Week</option>
+            <option value="1d">Day</option>
+            <option value="1h">Hour</option>
+        </select><br><br>
 
-            <input type="submit" value="Submit"><br><br>
-        </form>
-        <div class="table2">
-            {% for table in tables2 %}
-                {{ table|safe }}
-            {% endfor %}
-        </div>
-    </div>
-    <div>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    </div>
-</div>
-<div id="portfolio" class="tabcontent">
-    <div class="chart1">
-        <div class="pie">
-            <canvas id="pie-chart"></canvas>
-        </div>
-        <div class="bar">
-            <canvas id="bar-chart"></canvas>
-        </div>
-    </div>
-    <div class="chart2">
-        <div class="area">
-            <canvas id="thirdChart"></canvas>
-        </div>
-        <div class="frontier">
-            <canvas id="secondChart"></canvas>
-        </div>
-    </div>
-</div>
-<div id="stock" class="tabcontent">
-        <div class="line" id="firstChart"></div>
-</div>
-<div class="whole">
-    <div>
-        {% for table in tables1 %}
+        <input type="submit" value="Submit"><br><br>
+    </form>
+
+    <div id="summary" class="tabcontent">
+        {% for table in tables2 %}
             {{ table|safe }}
         {% endfor %}
     </div>
+
+
+    <div id="pie" class="tabcontent">
+        <canvas id="pie-chart"></canvas>
+    </div>
+    <div id="bar" class="tabcontent">
+        <canvas id="bar-chart"></canvas>
+    </div>
+
+    <div id="area" class="tabcontent">
+        <canvas id="thirdChart"></canvas>
+    </div>
+    <div id="frontier" class="tabcontent">
+        <canvas id="secondChart"></canvas>
+    </div>
+
+    <div id="stock" class="tabcontent">
+        <div class="line" id="firstChart"></div>
+    </div>
+
+    <div id="trading" class="tabcontent">
+        <div class="line" id="temp"></div>
+    </div>
+
+    {% for table in tables1 %}
+        {{ table|safe }}
+    {% endfor %}
 </div>
 <script>
     document.getElementById("defaultOpen").click();
 
+    var ma20 =
+    {{ ma20 | safe }}
+    var ma5 =
+    {{ ma5 | safe }}
+    var volumes =
+    {{ volume | safe }}
+    var high =
+    {{ high | safe }}
+    var low =
+    {{ low | safe }}
+    var open =
+    {{ open | safe }}
+    var close =
+    {{ close | safe }}
+    var labels =
+    {{ labels | safe }}
     var array = {{ values | safe }};
     var names = {{ names | safe }};
     var allocation = {{ allocations | safe }};
     var profits = {{ yearly_returns | safe }};
-    var labels = {{ labels | safe }}
-    //var profits = [0.1, 0.2, -0.1, 0, -0.4 ]
-    var target_returns = {{ target_returns | safe }}
-    var year_dates = {{ year_dates | safe }}
-
+    var target_returns =
+    {{ target_returns | safe }}
+    var year_dates =
+    {{ year_dates | safe }}
 
     var barChartData = Array();
     var barChartLabels = Array();
@@ -274,12 +285,81 @@
         }
     });
 
+    const ctx6 = document.getElementById('temp')
+
+    var trace1 = {
+        x: labels,
+        y: volumes,
+        type: 'bar',
+        xaxis: 'x',
+        name: "Volume"
+    };
+
+    var trace2 = {
+        x: labels,
+        close: close,
+        high: high,
+        low: low,
+        open: open,
+        type: 'candlestick',
+        yaxis: 'y2',
+        xaxis: 'x2',
+        opacity: 0.9,
+        name: "Return"
+    };
+
+    var trace3 = {
+        x: labels,
+        y: ma20,
+        type: 'chatter',
+        yaxis: 'y2',
+        xaxis: 'x2',
+        opacity: 0.7,
+        line: {
+            color: 'rgb(235, 225, 52)',
+            width: 2
+        },
+        name: "MA 20"
+    };
+
+    var trace4 = {
+        x: labels,
+        y: ma5,
+        type: 'chatter',
+        yaxis: 'y2',
+        xaxis: 'x2',
+        opacity: 0.7,
+        line: {
+            color: 'rgb(52, 95, 235)',
+            width: 2
+        },
+        name: "MA 5"
+    };
+
+    var data = [trace1, trace2, trace3, trace4];
+
+    var layout3 = {
+        grid: {
+            rows: 2,
+            columns: 1,
+            rowheights: [0.7, 0.3]
+        },
+        xaxis2: {
+            rangeslider: {
+                visible: false
+            }
+        },
+        yaxis: {domain: [0, 0.2]},
+        yaxis2: {domain: [0.3, 1]}
+    };
+    Plotly.newPlot(ctx6, data, layout3);
+
     function color(ret) {
         if (ret < 0) return ['rgba(200, 0, 0, 0.3)', 'rgba(200, 0, 0)']
         else return ['rgba(27, 207, 36, 0.3)', 'rgba(27, 207, 36)']
     }
 
-    function openCity(evt, cityName) {
+    function openView(evt, viewName) {
         // Declare all variables
         var i, tabcontent, tablinks;
 
@@ -295,8 +375,12 @@
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
 
+        for (i = 0; i < viewName.length; i++) {
+            document.getElementById(viewName[i]).style.display = "flex";
+        }
+
         // Show the current tab, and add an "active" class to the button that opened the tab
-        document.getElementById(cityName).style.display = "block";
+        // document.getElementById(viewName).style.display = "block";
         evt.currentTarget.className += " active";
     }
 
@@ -310,8 +394,7 @@
         var phrase = ""
         if (error.length > 1) {
             phrase = "Please review tickers. Could not find data for following tickers: "
-        }
-        else phrase = "Please review tickers. Could not find data for following ticker: "
+        } else phrase = "Please review tickers. Could not find data for following ticker: "
         var tickers = error.join(" ")
         window.alert(phrase.concat(tickers))
     }
