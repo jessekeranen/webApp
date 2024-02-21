@@ -45,12 +45,18 @@ def calculate():
     close = logic.get_close(df, names_wo_empty[0])
     ma20 = logic.get_moving_average(df, names_wo_empty[0], 20)
     ma5 = logic.get_moving_average(df, names_wo_empty[0], 5)
+    ema12 = logic.get_exponential_moving_average(df, names_wo_empty[0], 12)
+    ema26 = logic.get_exponential_moving_average(df, names_wo_empty[0], 26)
+    macd = ema12 - ema26
+    signal_line = macd.ewm(span=9, adjust=False).mean()
+    macd_diff = macd - signal_line
 
     return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
                            tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
                            color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),
                            yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns,
-                           volume=volume, high=high, low=low, open=open, close=close, ma20=ma20, ma5=ma5, error=[])
+                           volume=volume, high=high, low=low, open=open, close=close, ma20=ma20, ma5=ma5, macd=macd.tolist(),
+                           macd_diff=macd_diff.tolist(), signal_line=signal_line.tolist(), error=[])
 
 
 @app.errorhandler(400)

@@ -74,13 +74,9 @@
         <canvas id="secondChart"></canvas>
     </div>
 
-    <div id="stock" class="tabcontent">
-        <div class="line" id="firstChart"></div>
-    </div>
+    <div id="stock" class="tabcontent"></div>
 
-    <div id="trading" class="tabcontent">
-        <div class="line" id="temp"></div>
-    </div>
+    <div id="trading" class="tabcontent"></div>
 
     {% for table in tables1 %}
         {{ table|safe }}
@@ -89,6 +85,12 @@
 <script>
     document.getElementById("defaultOpen").click();
 
+    var macd =
+    {{ macd | safe }}
+    var macd_diff =
+    {{ macd_diff | safe }}
+    var signal_line =
+    {{ signal_line | safe }}
     var ma20 =
     {{ ma20 | safe }}
     var ma5 =
@@ -153,7 +155,7 @@
         }
     });
 
-    const ctx = document.getElementById('firstChart');
+    const ctx = document.getElementById('stock');
     var layout2 = {
         autosize: true,
         pan: true,
@@ -285,14 +287,13 @@
         }
     });
 
-    const ctx6 = document.getElementById('temp')
+    const ctx6 = document.getElementById('trading')
 
     var trace1 = {
         x: labels,
         y: volumes,
         type: 'bar',
-        xaxis: 'x',
-        name: "Volume"
+        name: "Volume",
     };
 
     var trace2 = {
@@ -303,7 +304,6 @@
         open: open,
         type: 'candlestick',
         yaxis: 'y2',
-        xaxis: 'x2',
         opacity: 0.9,
         name: "Return"
     };
@@ -313,7 +313,6 @@
         y: ma20,
         type: 'chatter',
         yaxis: 'y2',
-        xaxis: 'x2',
         opacity: 0.7,
         line: {
             color: 'rgb(235, 225, 52)',
@@ -327,7 +326,6 @@
         y: ma5,
         type: 'chatter',
         yaxis: 'y2',
-        xaxis: 'x2',
         opacity: 0.7,
         line: {
             color: 'rgb(52, 95, 235)',
@@ -336,21 +334,62 @@
         name: "MA 5"
     };
 
-    var data = [trace1, trace2, trace3, trace4];
+    var trace5 = {
+        x: labels,
+        y: macd,
+        type: 'chatter',
+        yaxis: 'y3',
+        opacity: 0.7,
+        line: {
+            color: 'rgb(52, 95, 235)',
+            width: 2
+        },
+        name: "MACD"
+    };
+
+    var trace6 = {
+        x: labels,
+        y: signal_line,
+        type: 'chatter',
+        yaxis: 'y3',
+        opacity: 0.7,
+        line: {
+            color: 'rgb(52, 95, 235)',
+            width: 2
+        },
+        name: "Signal line"
+    };
+
+    var trace7 = {
+        x: labels,
+        y: macd_diff,
+        type: 'bar',
+        yaxis: 'y3',
+        opacity: 0.7,
+        line: {
+            color: 'rgb(52, 95, 235)',
+            width: 2
+        },
+        name: "macd diff"
+    };
+
+    var data = [trace1, trace2, trace3, trace4, trace5, trace6, trace7];
 
     var layout3 = {
+        autosize: true,
+        responsive: true,
         grid: {
-            rows: 2,
-            columns: 1,
-            rowheights: [0.7, 0.3]
+            rows: 3,
+            columns: 1
         },
-        xaxis2: {
+        xaxis: {
             rangeslider: {
                 visible: false
             }
         },
-        yaxis: {domain: [0, 0.2]},
-        yaxis2: {domain: [0.3, 1]}
+        yaxis: {domain: [0.2, 0.3]},
+        yaxis3: {domain: [0, 0.1]},
+        yaxis2: {domain: [0.4, 1]}
     };
     Plotly.newPlot(ctx6, data, layout3);
 

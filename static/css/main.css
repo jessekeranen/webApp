@@ -57,6 +57,10 @@ input {
     flex-grow: 1;
 }
 
+#trading {
+    min-height: 40em;
+}
+
 #area {
     min-width: 50%;
 }

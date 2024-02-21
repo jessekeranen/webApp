@@ -296,3 +296,5 @@ def get_close(df, name):
 def get_moving_average(df, name, interval):
     return df.loc[df["Name"] == name, "Close"].rolling(window=interval).mean().fillna(0).tolist()
 
+def get_exponential_moving_average(df, name, interval):
+    return df.loc[df["Name"] == name, "Close"].ewm(span=interval, adjust=False).mean()
