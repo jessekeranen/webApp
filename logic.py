@@ -262,7 +262,7 @@ def check_tickers(tickers):
     existing_tickers = []
     for ticker in tickers:
         try:
-            if yf.Ticker(ticker).isin == '-':
+            if len(yf.Ticker(ticker).history(period='7d', interval='1d')) == 0:
                 raise ValueError()
             existing_tickers.append(ticker)
         except:
