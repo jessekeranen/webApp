@@ -57,13 +57,12 @@
         </form>
         <div id="temp" class="tabcontent">
             <img class="picture"
-                 src="https://s.yimg.com/uu/api/res/1.2/Fwf5HL4GsEGPbDfR3MJBPg--~B/aD02MzA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/wsj.com/7b2c285183be07ca3c4e8242b25a59a8"
-                 width="100" alt="test thumbnail">
+                 src={{ thumbnail|safe }}
+                 width="100" alt="thumbnail">
             <div class="test">
-                <b class="test2">Apple</b><br>
-                <p class="test2">Deutsche Bank CEO Gets Inspiration From a Board Game</p>
-                <a href="https://finance.yahoo.com/m/d98baf75-9210-302e-9db9-961fa65aecec/deutsche-bank-ceo-gets.html">Wall
-                    street journal</a>
+                <b class="test2">{{ name|safe }}</b><br>
+                <p class="test2">{{ title|safe }}</p>
+                <a href={{ link|safe }}>{{ publisher|safe }}</a>
             </div>
         </div>
     </div>

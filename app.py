@@ -58,7 +58,9 @@ def calculate():
                            color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),
                            yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns,
                            volume=volume, high=high, low=low, open=open, close=close, ma20=ma20, ma5=ma5, macd=macd.tolist(),
-                           macd_diff=macd_diff.tolist(), signal_line=signal_line.tolist(), error=[])
+                           macd_diff=macd_diff.tolist(), signal_line=signal_line.tolist(), name=names_wo_empty[0],
+                           title=news['title'], link=news['link'], publisher=news['publisher'],
+                           thumbnail=news['thumbnail']['resolutions'][0]['url'],  error=[])
 
 
 @app.errorhandler(400)
