@@ -51,6 +51,8 @@ def calculate():
     signal_line = macd.ewm(span=9, adjust=False).mean()
     macd_diff = macd - signal_line
 
+    news = logic.get_news(names_wo_empty[0])
+
     return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
                            tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
                            color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),

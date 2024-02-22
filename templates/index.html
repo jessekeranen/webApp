@@ -20,45 +20,58 @@
     </div>
 </header>
 <div class="tab">
-    <button class="tablinks" id="defaultOpen" onclick="openView(event, ['pie', 'bar', 'area', 'frontier', 'summary'])">Portfolio</button>
+    <button class="tablinks" id="defaultOpen" onclick="openView(event, ['pie', 'bar', 'area', 'frontier', 'summary'])">
+        Portfolio
+    </button>
     <button class="tablinks" onclick="openView(event, ['stock'])">Stock</button>
-    <button class="tablinks" onclick="openView(event, ['trading'])">Trading view</button>
+    <button class="tablinks" onclick="openView(event, ['temp', 'trading'])">Trading view</button>
 </div>
 <div class="container">
-    <form class="choices" action="/echo" method="post">
-        <label for="name1">Company Ticker:</label>
-        <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
-        <label for="name2">Company Ticker:</label>
-        <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
-        <label for="name3">Company Ticker:</label>
-        <input type="text" id="name3" placeholder="IBM" name="name3"><br>
-        <label for="name4">Company Ticker:</label>
-        <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
-        <label for="name5">Company Ticker:</label>
-        <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
-        <label for="start">Start Date:</label>
-        <input type="datetime-local" id="start" name="start"><br>
-        <label for="end">End Date:</label>
-        <input type="datetime-local" id="end" name="end"><br><br>
-        <input type="hidden" name="page" value="index">
+    <div class="container2">
+        <form class="choices" action="/echo" method="post">
+            <label for="name1">Company Ticker:</label>
+            <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
+            <label for="name2">Company Ticker:</label>
+            <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
+            <label for="name3">Company Ticker:</label>
+            <input type="text" id="name3" placeholder="IBM" name="name3"><br>
+            <label for="name4">Company Ticker:</label>
+            <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
+            <label for="name5">Company Ticker:</label>
+            <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
+            <label for="start">Start Date:</label>
+            <input type="datetime-local" id="start" name="start"><br>
+            <label for="end">End Date:</label>
+            <input type="datetime-local" id="end" name="end"><br><br>
+            <input type="hidden" name="page" value="index">
 
-        <label for="interval">Interval:</label>
-        <select name="interval" id="interval">
-            <option value="1mo">Month</option>
-            <option value="1wk">Week</option>
-            <option value="1d">Day</option>
-            <option value="1h">Hour</option>
-        </select><br><br>
+            <label for="interval">Interval:</label>
+            <select name="interval" id="interval">
+                <option value="1mo">Month</option>
+                <option value="1wk">Week</option>
+                <option value="1d">Day</option>
+                <option value="1h">Hour</option>
+            </select><br><br>
 
-        <input type="submit" value="Submit"><br><br>
-    </form>
-
+            <input type="submit" value="Submit"><br><br>
+        </form>
+        <div id="temp" class="tabcontent">
+            <img class="picture"
+                 src="https://s.yimg.com/uu/api/res/1.2/Fwf5HL4GsEGPbDfR3MJBPg--~B/aD02MzA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/wsj.com/7b2c285183be07ca3c4e8242b25a59a8"
+                 width="100" alt="test thumbnail">
+            <div class="test">
+                <b class="test2">Apple</b><br>
+                <p class="test2">Deutsche Bank CEO Gets Inspiration From a Board Game</p>
+                <a href="https://finance.yahoo.com/m/d98baf75-9210-302e-9db9-961fa65aecec/deutsche-bank-ceo-gets.html">Wall
+                    street journal</a>
+            </div>
+        </div>
+    </div>
     <div id="summary" class="tabcontent">
         {% for table in tables2 %}
             {{ table|safe }}
         {% endfor %}
     </div>
-
 
     <div id="pie" class="tabcontent">
         <canvas id="pie-chart"></canvas>

@@ -298,3 +298,6 @@ def get_moving_average(df, name, interval):
 
 def get_exponential_moving_average(df, name, interval):
     return df.loc[df["Name"] == name, "Close"].ewm(span=interval, adjust=False).mean()
+
+def get_news(ticker):
+    return yf.Ticker(ticker).news[0]
