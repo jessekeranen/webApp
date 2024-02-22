@@ -36,7 +36,9 @@ def getdata(names, start, end, interv):
 
     final_weights, eff_frontier, target_returns = efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights)
 
-    sharpe_port_ret_arr = portfolio_return_monthly(pd.pivot_table(df, index=['Date'], columns='Name', values='Adj Close').reset_index().set_index("Date").pct_change(), sharpe_portfolio.x)
+    sharpe_port_ret_arr = portfolio_return_monthly(
+        pd.pivot_table(df, index=['Date'], columns='Name', values='Adj Close').reset_index().set_index(
+            "Date").pct_change(), sharpe_portfolio.x)
 
     sharpe_port_year_returns = year_returns(sharpe_port_ret_arr)
     sharpe_port_year_dates = sharpe_port_year_returns.index
@@ -44,7 +46,8 @@ def getdata(names, start, end, interv):
     sharpe_port_year_dates = sharpe_port_year_dates.tolist()
     sharpe_port_year_returns = sharpe_port_year_returns[0].values.tolist()
 
-    info = {"Weight": sharpe_portfolio.x, "Company": tickers, "Return": ret.to_list(), "Std.": sd.to_list(), "Sharpe": (ret / sd).to_list()}
+    info = {"Weight": sharpe_portfolio.x, "Company": tickers, "Return": ret.to_list(), "Std.": sd.to_list(),
+            "Sharpe": (ret / sd).to_list()}
     info = pd.DataFrame(info)
     info = info.set_index("Company")
 
@@ -52,13 +55,13 @@ def getdata(names, start, end, interv):
 
 
 def stock_information(tickers, start, end, interval):
-    if  start != "" and end != "":
+    if start != "" and end != "":
         df = yf.download(tickers=tickers, start=start, end=end, interval=interval, group_by="ticker", rounding=True,
                          auto_adjust=False, prepost=False, threads=10)
     else:
         df = yf.download(tickers=tickers, interval=interval, group_by="ticker", rounding=True,
                          auto_adjust=False, prepost=False, threads=10)
-    
+
     df.reset_index(inplace=True)
     df.dropna(inplace=True)
 
@@ -119,10 +122,9 @@ def efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights):
 
         # could be that despite restriction slightly negative weight is returned
         res.x[numpy.where(res.x < 0)] = 0
-        res.x =  np.round(res.x, 2)
+        res.x = np.round(res.x, 2)
         res.x = res.x / np.sum(res.x)
         final_weights.append(res.x)
-
 
     final_weights = np.array(final_weights).T.tolist()
 
@@ -149,7 +151,6 @@ def cov_matrix(df):
 '''
     Calculates mean portfolio return. Basically weighted sum of the means of the asset returns.
 '''
-
 def portfolio_return_yearly(returns, weights):
     return np.dot(returns, weights) * 12
 
@@ -214,7 +215,8 @@ def optimization(profits, weights, cov, target):
     if target == -2:
         return -portfolio_return_yearly(profits, weights) / portfolio_std(cov, weights), weights, [np.sum(weights) - 1]
     else:
-        return portfolio_std(cov, weights), weights, [np.sum(weights) - 1, portfolio_return_yearly(profits, weights) - target]
+        return portfolio_std(cov, weights), weights, [np.sum(weights) - 1,
+                                                      portfolio_return_yearly(profits, weights) - target]
 
 
 '''
@@ -301,8 +303,10 @@ def get_close(df, name):
 def get_moving_average(df, name, interval):
     return df.loc[df["Name"] == name, "Close"].rolling(window=interval).mean().fillna("nan").tolist()
 
+
 def get_exponential_moving_average(df, name, interval):
     return df.loc[df["Name"] == name, "Close"].ewm(span=interval, adjust=False).mean()
+
 
 def get_news(ticker):
     return yf.Ticker(ticker).news

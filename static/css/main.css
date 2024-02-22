@@ -29,8 +29,9 @@ input {
 }
 
 .choices {
-    border-radius: 25px;
+    border-radius: 1em;
     background-color: #f3f3f3;
+    border: solid #a6a6a6;
     opacity: 90%;
     padding: 1em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -85,6 +86,8 @@ input {
 }
 
 #line, #frontier, #area, #pie, #bar, #stock, #trading {
+    border-radius: 1em;
+    border: solid #a6a6a6;
     margin: 0.5em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     background-color: #f3f3f3;
