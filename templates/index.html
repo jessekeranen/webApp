@@ -30,15 +30,15 @@
     <div class="container2">
         <form class="choices" action="/echo" method="post">
             <label for="name1">Company Ticker:</label>
-            <input type="text" id="name1" placeholder="AAPL" name="name1"><br>
+            <input data-toggle="tooltip" data-placement="top" title="Please insert Yahoo finance ticker" type="text" id="name1" placeholder="AAPL" name="name1"><br>
             <label for="name2">Company Ticker:</label>
-            <input type="text" id="name2" placeholder="MSFT" name="name2"><br>
+            <input data-toggle="tooltip" data-placement="top" title="Please insert Yahoo finance ticker" type="text" id="name2" placeholder="MSFT" name="name2"><br>
             <label for="name3">Company Ticker:</label>
-            <input type="text" id="name3" placeholder="IBM" name="name3"><br>
+            <input data-toggle="tooltip" data-placement="top" title="Please insert Yahoo finance ticker" type="text" id="name3" placeholder="IBM" name="name3"><br>
             <label for="name4">Company Ticker:</label>
-            <input type="text" id="name4" placeholder="AMZN" name="name4"><br>
+            <input data-toggle="tooltip" data-placement="top" title="Please insert Yahoo finance ticker" type="text" id="name4" placeholder="AMZN" name="name4"><br>
             <label for="name5">Company Ticker:</label>
-            <input type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
+            <input data-toggle="tooltip" data-placement="top" title="Please insert Yahoo finance ticker" type="text" id="name5" placeholder="NFLX" name="name5"><br><br>
             <label for="start">Start Date:</label>
             <input type="date" id="start" name="start"><br>
             <label for="end">End Date:</label>
@@ -191,7 +191,7 @@
             autorange: true
         }
     }
-    Plotly.newPlot(ctx, lineChartData, layout2);
+    Plotly.newPlot(ctx, lineChartData, layout2, {responsive: true });
 
     const ctx2 = document.getElementById('secondChart').getContext("2d");
 
@@ -413,7 +413,7 @@
         yaxis3: {domain: [0, 0.1]},
         yaxis2: {domain: [0.4, 1]}
     };
-    Plotly.newPlot(ctx6, data, layout3);
+    Plotly.newPlot(ctx6, data, layout3, {responsive: true });
 
     function color(ret) {
         if (ret < 0) return ['rgba(200, 0, 0, 0.3)', 'rgba(200, 0, 0)']
