@@ -68,3 +68,8 @@ def calculate():
 @app.errorhandler(400)
 def bad_request(e):
     return render_template("start_page.html")
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template("start_page.html")

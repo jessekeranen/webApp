@@ -35,7 +35,7 @@ input {
     opacity: 90%;
     padding: 1em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    margin: 0.5em 0.5em 0 0.5em;
+    margin: 0.2em 0.1em 0 0.2em;
     float: left;
     flex-grow: 1;
 }
@@ -55,7 +55,7 @@ input {
 
 #news1, #news2 {
     border-radius: 1em;
-    margin: 0.5em 0.5em 0 0.5em;
+    margin: 0.2em 0.2em 0 0.2em;
     background-color: #f3f3f3;
     border: solid #a6a6a6;
     display: flex;
@@ -88,7 +88,7 @@ input {
 #line, #frontier, #area, #pie, #bar, #stock, #trading {
     border-radius: 1em;
     border: solid #a6a6a6;
-    margin: 0.5em;
+    margin: 0.1em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     background-color: #f3f3f3;
     opacity: 90%;
@@ -130,7 +130,7 @@ button {
 table {
     border: none;
     border-collapse: collapse;
-    margin: 0.5em;
+    margin: 0.2em;
     font-size: 0.9em;
     font-family: sans-serif;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
