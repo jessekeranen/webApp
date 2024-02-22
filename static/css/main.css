@@ -40,7 +40,7 @@ input {
 }
 
 .choices_start_page {
-    border-radius: 25px;
+    border-radius: 1em;
     background-color: #f3f3f3;
     border: solid #a6a6a6;
     opacity: 90%;
@@ -52,21 +52,23 @@ input {
     flex-grow: 1;
 }
 
-#temp {
-    border-radius: 25px;
+#news1, #news2 {
+    border-radius: 1em;
     margin: 0.5em 0.5em 0 0.5em;
     background-color: #f3f3f3;
     border: solid #a6a6a6;
     display: flex;
     align-self: start;
+    font-size: 0.8em;
 }
 
 .picture {
-    border-radius: 25px 0 0 25px;
+    border-radius: 1em 0 0 1em;
 }
 
 .test {
     margin: 0.2em 1em 0.2em 0.5em;
+    padding: 0;
 }
 
 .test2 {
@@ -129,7 +131,6 @@ table {
     font-size: 0.9em;
     font-family: sans-serif;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    border-radius:6px;
     border:solid black 1px;
     flex-grow: 1;
 }

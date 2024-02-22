@@ -24,7 +24,7 @@
         Portfolio
     </button>
     <button class="tablinks" onclick="openView(event, ['stock'])">Stock</button>
-    <button class="tablinks" onclick="openView(event, ['temp', 'trading'])">Trading view</button>
+    <button class="tablinks" onclick="openView(event, ['news1', 'news2', 'trading'])">Trading view</button>
 </div>
 <div class="container">
     <div class="container2">
@@ -55,14 +55,24 @@
 
             <input type="submit" value="Submit"><br><br>
         </form>
-        <div id="temp" class="tabcontent">
+        <div id="news1" class="tabcontent">
             <img class="picture"
-                 src={{ thumbnail|safe }}
+                 src={{ thumbnail1|safe }}
                  width="100" alt="thumbnail">
             <div class="test">
                 <b class="test2">{{ name|safe }}</b><br>
-                <p class="test2">{{ title|safe }}</p>
-                <a href={{ link|safe }}>{{ publisher|safe }}</a>
+                <p class="test2">{{ title1|safe }}</p>
+                <a href={{ link1|safe }}>{{ publisher1|safe }}</a>
+            </div>
+        </div>
+        <div id="news2" class="tabcontent">
+            <img class="picture"
+                 src={{ thumbnail2|safe }}
+                 width="100" alt="thumbnail">
+            <div class="test">
+                <b class="test2">{{ name|safe }}</b><br>
+                <p class="test2">{{ title2|safe }}</p>
+                <a href={{ link2|safe }}>{{ publisher2|safe }}</a>
             </div>
         </div>
     </div>
@@ -353,7 +363,7 @@
         yaxis: 'y3',
         opacity: 0.7,
         line: {
-            color: 'rgb(52, 95, 235)',
+            color: 'rgb(5250, 126, 2)',
             width: 2
         },
         name: "MACD"
@@ -366,7 +376,7 @@
         yaxis: 'y3',
         opacity: 0.7,
         line: {
-            color: 'rgb(52, 95, 235)',
+            color: 'rgb(10, 10, 10)',
             width: 2
         },
         name: "Signal line"
