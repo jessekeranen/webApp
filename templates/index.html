@@ -106,7 +106,9 @@
 </div>
 <script>
     document.getElementById("defaultOpen").click();
-
+    var ma5 =
+    {{ ma5 | safe }}
+    ma5.forEach((item, i) => { if (item == "nan") ma5[i] = null; });
     var macd =
     {{ macd | safe }}
     var macd_diff =
@@ -115,8 +117,6 @@
     {{ signal_line | safe }}
     var ma20 =
     {{ ma20 | safe }}
-    var ma5 =
-    {{ ma5 | safe }}
     var volumes =
     {{ volume | safe }}
     var high =

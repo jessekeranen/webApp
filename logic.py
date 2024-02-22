@@ -52,8 +52,13 @@ def getdata(names, start, end, interv):
 
 
 def stock_information(tickers, start, end, interval):
-    df = yf.download(tickers=tickers, start=start, end=end, interval=interval, group_by="ticker", rounding=True, auto_adjust=False,
-                     prepost=False, threads=10)
+    if  start != "" and end != "":
+        df = yf.download(tickers=tickers, start=start, end=end, interval=interval, group_by="ticker", rounding=True,
+                         auto_adjust=False, prepost=False, threads=10)
+    else:
+        df = yf.download(tickers=tickers, interval=interval, group_by="ticker", rounding=True,
+                         auto_adjust=False, prepost=False, threads=10)
+    
     df.reset_index(inplace=True)
     df.dropna(inplace=True)
 
@@ -294,7 +299,7 @@ def get_close(df, name):
 
 
 def get_moving_average(df, name, interval):
-    return df.loc[df["Name"] == name, "Close"].rolling(window=interval).mean().fillna(0).tolist()
+    return df.loc[df["Name"] == name, "Close"].rolling(window=interval).mean().fillna("nan").tolist()
 
 def get_exponential_moving_average(df, name, interval):
     return df.loc[df["Name"] == name, "Close"].ewm(span=interval, adjust=False).mean()
