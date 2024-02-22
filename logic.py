@@ -5,10 +5,10 @@ import numpy as np
 from scipy.optimize import minimize
 
 
-def getdata(names, interv):
+def getdata(names, start, end, interv):
     tickers = check_tickers(names)
 
-    df, labels = stock_information(tickers, interv)
+    df, labels = stock_information(tickers, start, end, interv)
 
     prices = data_for_price_chart(df)
 
@@ -51,8 +51,8 @@ def getdata(names, interv):
     return df, labels, prices, tickers, ret_sd, color, eff_frontier, final_weights, info, sharpe_port_year_returns, sharpe_port_year_dates, target_returns
 
 
-def stock_information(tickers, interval):
-    df = yf.download(tickers=tickers, interval=interval, group_by="ticker", rounding=True, auto_adjust=False,
+def stock_information(tickers, start, end, interval):
+    df = yf.download(tickers=tickers, start=start, end=end, interval=interval, group_by="ticker", rounding=True, auto_adjust=False,
                      prepost=False, threads=10)
     df.reset_index(inplace=True)
     df.dropna(inplace=True)

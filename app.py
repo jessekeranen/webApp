@@ -35,8 +35,8 @@ def calculate():
                 temp.append(element)
         return render_template(html, error=temp, len=len(names_wo_empty))
 
-    df, labels, prices, tickers, rand, color, eff_frontier, weights, info, yearly_returns, year_dates, target_returns = logic.getdata(
-        names, interval)
+    df, labels, prices, tickers, rand, color, eff_frontier, weights, info, yearly_returns, year_dates, target_returns =\
+        logic.getdata(names, start, end, interval)
 
     volume = logic.get_volume(df, names_wo_empty[0])
     high = logic.get_high(df, names_wo_empty[0])
