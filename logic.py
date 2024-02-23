@@ -70,8 +70,8 @@ def stock_information(tickers, start, end, interval):
     labels = labels.tolist()
 
     df = pd.melt(df, id_vars=['Date'])
-    df = pd.pivot_table(df, index=['Date', 'variable_0'], columns='variable_1', values='value').reset_index()
-    df.rename(columns={'variable_0': 'Name'}, inplace=True)
+    df = pd.pivot_table(df, index=['Date', 'Ticker'], columns='Price', values='value').reset_index()
+    df.rename(columns={'Ticker': 'Name'}, inplace=True)
     df["Return"] = df.groupby("Name")["Adj Close"].pct_change(1)
     df.dropna(inplace=True)
 
