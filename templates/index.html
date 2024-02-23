@@ -106,8 +106,9 @@
 </div>
 <script>
     document.getElementById("defaultOpen").click();
-    var ma5 =
-    {{ ma5 | safe }}
+
+
+    var ma5 = {{ ma5 | safe }}
     ma5.forEach((item, i) => { if (item == "nan") ma5[i] = null; });
     var macd =
     {{ macd | safe }}
@@ -142,12 +143,30 @@
     var barChartLabels = Array();
     var barChartColors = Array();
     var barChartBorderColors = Array();
+    var volumeColors = Array();
+    var macd_diffColors = Array();
 
     for (let i = 0; i < profits.length; i++) {
         barChartData[i] = profits[i];
         barChartLabels[i] = year_dates[i];
         barChartColors[i] = color(profits[i])[0];
         barChartBorderColors[i] = color(profits[i])[1];
+    }
+
+    for (let i = 0; i < volumes.length; i++) {
+        if (open[i] > close[i]) {
+            volumeColors[i] = 'rgba(27, 207, 36, 1)'
+        } else {
+            volumeColors[i] = 'rgba(200, 0, 0, 1)'
+        }
+    }
+
+    for (let i = 0; i < macd_diff.length; i++) {
+        if (macd_diff[i] > 0) {
+            macd_diffColors[i] = 'rgba(27, 207, 36, 1)'
+        } else {
+            macd_diffColors[i] = 'rgba(200, 0, 0, 1)'
+        }
     }
 
     const ctx5 = document.getElementById('bar-chart').getContext("2d");
@@ -314,6 +333,9 @@
     var trace1 = {
         x: labels,
         y: volumes,
+        marker: {
+            color: volumeColors
+        },
         type: 'bar',
         name: "Volume",
     };
@@ -388,9 +410,8 @@
         type: 'bar',
         yaxis: 'y3',
         opacity: 0.7,
-        line: {
-            color: 'rgb(52, 95, 235)',
-            width: 2
+        marker: {
+            color: macd_diffColors
         },
         name: "macd diff"
     };
