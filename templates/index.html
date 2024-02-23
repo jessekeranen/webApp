@@ -154,7 +154,7 @@
     }
 
     for (let i = 0; i < volumes.length; i++) {
-        if (open[i] > close[i]) {
+        if (open[i] < close[i]) {
             volumeColors[i] = 'rgba(27, 207, 36, 1)'
         } else {
             volumeColors[i] = 'rgba(200, 0, 0, 1)'
