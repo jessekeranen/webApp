@@ -51,9 +51,10 @@ def calculate():
     signal_line = macd.ewm(span=9, adjust=False).mean()
     macd_diff = macd - signal_line
 
-    news = logic.get_news(name)
 
-    return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
+    try:
+        news = logic.get_news(name)
+        return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
                            tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
                            color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),
                            yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns,
@@ -63,6 +64,18 @@ def calculate():
                            thumbnail1=news[0]['thumbnail']['resolutions'][0]['url'], title2=news[1]['title'],
                            link2=news[1]['link'], publisher2=news[1]['publisher'],
                            thumbnail2=news[1]['thumbnail']['resolutions'][0]['url'],  error=[])
+    except:
+        return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
+                               tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
+                               color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),
+                               yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns,
+                               volume=volume, high=high, low=low, open=open, close=close, ma20=ma20, ma5=ma5,
+                               macd=macd.tolist(),
+                               macd_diff=macd_diff.tolist(), signal_line=signal_line.tolist(), name=name,
+                               title1="", publisher1="",
+                               thumbnail1="", title2="",
+                               link2="", publisher2="",
+                               thumbnail2="", error=[])
 
 
 @app.errorhandler(400)
