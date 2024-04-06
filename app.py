@@ -54,29 +54,21 @@ def calculate():
 
     try:
         news = logic.get_news(name)
-        return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
+    except:
+        news = [{'title': 'Financial Times', 'link': 'https://www.ft.com/', 'publisher': 'Financial Times', 'thumbnail': {'resolutions': [{'url': 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Financial_Times_corporate_logo_%28no_background%29.svg'}]}},
+                {'title': 'The Economist', 'link': 'https://www.economist.com/', 'publisher': 'The Economist', 'thumbnail': {'resolutions': [{'url': 'https://upload.wikimedia.org/wikipedia/commons/6/65/The_Economist_Logo.svg'}]}}]
+
+    return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
                            tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
                            color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),
                            yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns,
-                           volume=volume, high=high, low=low, open=open, close=close, ma20=ma20, ma5=ma5, macd=macd.tolist(),
+                           volume=volume, high=high, low=low, open=open, close=close, ma20=ma20, ma5=ma5,
+                           macd=macd.tolist(),
                            macd_diff=macd_diff.tolist(), signal_line=signal_line.tolist(), name=name,
                            title1=news[0]['title'], link1=news[0]['link'], publisher1=news[0]['publisher'],
                            thumbnail1=news[0]['thumbnail']['resolutions'][0]['url'], title2=news[1]['title'],
                            link2=news[1]['link'], publisher2=news[1]['publisher'],
-                           thumbnail2=news[1]['thumbnail']['resolutions'][0]['url'],  error=[])
-    except:
-        return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
-                               tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
-                               color=color, eff=eff_frontier, weights=weights, allocations=info["Weight"].to_list(),
-                               yearly_returns=yearly_returns, year_dates=year_dates, target_returns=target_returns,
-                               volume=volume, high=high, low=low, open=open, close=close, ma20=ma20, ma5=ma5,
-                               macd=macd.tolist(),
-                               macd_diff=macd_diff.tolist(), signal_line=signal_line.tolist(), name=name,
-                               title1="", publisher1="",
-                               thumbnail1="", title2="",
-                               link2="", publisher2="",
-                               thumbnail2="", error=[])
-
+                           thumbnail2=news[1]['thumbnail']['resolutions'][0]['url'], error=[])
 
 @app.errorhandler(400)
 def bad_request(e):
