@@ -18,6 +18,7 @@ def calculate():
     end = str(request.form["end"])
     interval = str(request.form["interval"])
 
+
     names_wo_empty = list(filter(None, names))
     names_wo_empty.sort()
     tickers = logic.check_tickers(names)
@@ -51,12 +52,16 @@ def calculate():
     signal_line = macd.ewm(span=9, adjust=False).mean()
     macd_diff = macd - signal_line
 
-
+    '''
     try:
         news = logic.get_news(name)
     except:
         news = [{'title': 'Financial Times', 'link': 'https://www.ft.com/', 'publisher': 'Financial Times', 'thumbnail': {'resolutions': [{'url': 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Financial_Times_corporate_logo_%28no_background%29.svg'}]}},
                 {'title': 'The Economist', 'link': 'https://www.economist.com/', 'publisher': 'The Economist', 'thumbnail': {'resolutions': [{'url': 'https://upload.wikimedia.org/wikipedia/commons/6/65/The_Economist_Logo.svg'}]}}]
+    '''
+    news = [{'title': 'Financial Times', 'link': 'https://www.ft.com/', 'publisher': 'Financial Times', 'thumbnail': {'resolutions': [{'url': 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Financial_Times_corporate_logo_%28no_background%29.svg'}]}},
+                {'title': 'The Economist', 'link': 'https://www.economist.com/', 'publisher': 'The Economist', 'thumbnail': {'resolutions': [{'url': 'https://upload.wikimedia.org/wikipedia/commons/6/65/The_Economist_Logo.svg'}]}}]
+
 
     return render_template("index.html", tables1=[df.tail(10).to_html(index=False, index_names=False)],
                            tables2=[info.to_html()], labels=labels, values=prices, names=tickers, rand=rand,
@@ -78,3 +83,4 @@ def bad_request(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template("start_page.html")
+

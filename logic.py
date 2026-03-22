@@ -4,7 +4,6 @@ import yfinance as yf
 import numpy as np
 from scipy.optimize import minimize
 
-
 def getdata(names, start, end, interv):
     tickers = check_tickers(names)
 
@@ -59,7 +58,7 @@ def stock_information(tickers, start, end, interval):
         df = yf.download(tickers=tickers, start=start, end=end, interval=interval, group_by="ticker", rounding=True,
                          auto_adjust=False, prepost=False, threads=10)
     else:
-        df = yf.download(tickers=tickers, interval=interval, group_by="ticker", rounding=True,
+        df = yf.download(tickers=tickers, group_by="ticker", rounding=True,
                          auto_adjust=False, prepost=False, threads=10)
 
     df.reset_index(inplace=True)
@@ -72,7 +71,7 @@ def stock_information(tickers, start, end, interval):
     df = pd.melt(df, id_vars=['Date'])
     df = pd.pivot_table(df, index=['Date', 'Ticker'], columns='Price', values='value').reset_index()
     df.rename(columns={'Ticker': 'Name'}, inplace=True)
-    df["Return"] = df.groupby("Name")["Adj Close"].pct_change(1)
+    df["Return"] = df.groupby("Name", group_keys=False)["Adj Close"].pct_change(1)
     df.dropna(inplace=True)
 
     return df, labels
@@ -80,7 +79,7 @@ def stock_information(tickers, start, end, interval):
 
 def data_for_price_chart(df):
     df2 = df.copy()
-    df2["Cum. Return"] = df2.groupby("Name")['Return'].apply(lambda x: np.cumprod(1 + x))
+    df2["Cum. Return"] = df2.groupby("Name", group_keys=False)['Return'].apply(lambda x: np.cumprod(1 + x))
     df2 = pd.pivot_table(df2, index=['Date'], columns='Name', values='Cum. Return').reset_index()
     df2 = df2.iloc[:, df2.columns != 'Date']
     df2.loc[-1] = [1] * len(df2.columns)  # adding a row
@@ -137,11 +136,11 @@ def efficient_frontier(ret, cov, min_var_port_ret, max_ret, weights):
 
 
 def stock_returns(df):
-    return df.groupby("Name")["Return"].mean()
+    return df.groupby("Name", group_keys=False)["Return"].mean()
 
 
 def stock_std(df):
-    return df.groupby("Name")["Return"].std()
+    return df.groupby("Name", group_keys=False)["Return"].std()
 
 
 def cov_matrix(df):
@@ -310,3 +309,6 @@ def get_exponential_moving_average(df, name, interval):
 
 def get_news(ticker):
     return yf.Ticker(ticker).news
+
+df, labels, prices, tickers, rand, color, eff_frontier, weights, info, yearly_returns, year_dates, target_returns =\
+        getdata(["AAPL", "MSFT"], "2020-01-01", "2023-01-01", "1mo")
